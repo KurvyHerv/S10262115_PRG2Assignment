@@ -33,7 +33,11 @@ namespace S10262115_PRG2Assignment
         public double CalculateTotal()
         {
             double total = 0;
-
+            foreach (IceCream icecream in IceCreamList)
+            {
+                total += icecream.CalculatePrice();
+            }
+            return total;
         }
         public override string ToString()
         {

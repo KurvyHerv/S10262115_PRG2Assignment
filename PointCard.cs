@@ -19,16 +19,26 @@ namespace S10262115_PRG2Assignment
         }
         public void AddPoints(int points)
         {
-            
+            Points += points;
         }
         public void RedeemPoints(int points)
         {
-
+            Points -= points;
         }
-        public void Punch() { }
+        public void Punch()
+        {
+            if (PunchCard < 11)
+            {
+                PunchCard++;
+            }
+            else
+            {
+                PunchCard = 0;
+            }
+        }
         public override string ToString()
         {
-            return base.ToString();
+            return Points + PunchCard + Tier;
         }
     }
 }
