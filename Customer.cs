@@ -23,7 +23,7 @@ namespace S10262115_PRG2Assignment
         }
         public Order MakeOrder()
         {
-      
+            
         }
         public bool IsBirthday()
         {
@@ -31,7 +31,7 @@ namespace S10262115_PRG2Assignment
         }
         public override string ToString()
         {
-            return base.ToString();
+            return base.ToString() + Name + MemberId + Dob;
         }
     }
 }
