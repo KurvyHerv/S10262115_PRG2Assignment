@@ -20,6 +20,10 @@ namespace S10262115_PRG2Assignment
             {
                 price = 4.00;
                 price = price + Toppings.Count;
+                if (Flavour)
+                {
+                    price = price + 2.00;
+                }
             }
             else if (Scoops == 2)
             {

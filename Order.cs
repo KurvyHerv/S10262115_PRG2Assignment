@@ -24,11 +24,11 @@ namespace S10262115_PRG2Assignment
         }
         public void AddIceCream(IceCream iceCream)
         {
-
+            IceCreamList.Add(iceCream);
         }
         public void DeleteIceCream(int id)
         {
-
+            IceCreamList.RemoveAt(id - 1);
         }
         public double CalculateTotal()
         {
