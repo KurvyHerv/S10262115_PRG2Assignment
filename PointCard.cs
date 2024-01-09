@@ -19,7 +19,7 @@ namespace S10262115_PRG2Assignment
         }
         public void AddPoints(int points)
         {
-            PointCard.Add(points);
+            
         }
         public void RedeemPoints(int points)
         {
