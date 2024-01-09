@@ -23,7 +23,7 @@ namespace S10262115_PRG2Assignment
         public abstract double CalculatePrice();
         public override string ToString()
         {
-            return ToString();
+            return Option + Scoops + Flavours + Toppings;
         }
 
     }
