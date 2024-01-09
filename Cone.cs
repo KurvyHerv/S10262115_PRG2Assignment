@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,35 @@ namespace S10262115_PRG2Assignment
         }
         public override double CalculatePrice()
         {
-
+            double price = 0.00;
+            if (Scoops == 1)
+            {
+                price = 4.00;
+                price = price + Toppings.Count;
+                if (Dipped)
+                {
+                    price = price + 2.00;
+                }
+            }
+            else if (Scoops == 2)
+            {
+                price = 5.50;
+                price = price + Toppings.Count;
+                if (Dipped)
+                {
+                    price = price + 2.00;
+                }
+            }
+            else if (Scoops == 3)
+            {
+                price = 6.50;
+                price = price + Toppings.Count;
+                if (Dipped)
+                {
+                    price = price + 2.00;
+                }
+            }
+            return price;
         }
         public override string ToString()
         {

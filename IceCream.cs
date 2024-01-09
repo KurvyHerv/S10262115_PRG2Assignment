@@ -20,10 +20,7 @@ namespace S10262115_PRG2Assignment
             Flavours = flavours;
             Toppings = toppings;
         }
-        public double CalculatePrice()
-        {
-
-        }
+        public abstract double CalculatePrice();
         public override string ToString()
         {
             return ToString();
