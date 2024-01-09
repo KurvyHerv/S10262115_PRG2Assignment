@@ -21,35 +21,32 @@ namespace S10262115_PRG2Assignment
             if (Scoops == 1)
             {
                 price = 4.00;
-                price = price + Toppings.Count;
-                if (Dipped)
-                {
-                    price = price + 2.00;
-                }
             }
             else if (Scoops == 2)
             {
                 price = 5.50;
-                price = price + Toppings.Count;
-                if (Dipped)
-                {
-                    price = price + 2.00;
-                }
             }
             else if (Scoops == 3)
             {
                 price = 6.50;
-                price = price + Toppings.Count;
-                if (Dipped)
+            }
+            price = price + Toppings.Count;
+            foreach (Flavour flavour in Flavours)
+            {
+                if (flavour.Premium)
                 {
-                    price = price + 2.00;
+                    price += 2;
                 }
+            }
+            if (Dipped)
+            {
+                price *= 2;
             }
             return price;
         }
         public override string ToString()
         {
-            return base.ToString();
+            return base.ToString() + Dipped;
         }
     }
 }

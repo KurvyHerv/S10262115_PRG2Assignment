@@ -41,7 +41,7 @@ namespace S10262115_PRG2Assignment
 
             if (WaffleFlavour == "Red Velvet" || WaffleFlavour == "Charcoal" || WaffleFlavour == "Pandan")
             {
-                price = price + 3.00;
+                price += 3.00;
             }
             return price;
         }
