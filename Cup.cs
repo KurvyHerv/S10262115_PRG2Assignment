@@ -19,21 +19,22 @@ namespace S10262115_PRG2Assignment
             if (Scoops == 1)
             {
                 price = 4.00;
-                price = price + Toppings.Count;
-                if (Flavour)
-                {
-                    price = price + 2.00;
-                }
             }
             else if (Scoops == 2)
             {
                 price = 5.50;
-                price = price + Toppings.Count;
             }
             else if (Scoops == 3)
             {
                 price = 6.50;
-                price = price + Toppings.Count;
+            }
+            price = price + Toppings.Count;
+            foreach (Flavour flavour in Flavours)
+            {
+                if (flavour.Premium)
+                {
+                    price += 2;
+                }
             }
             return price;
         }
