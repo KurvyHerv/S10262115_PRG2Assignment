@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace S10262115_PRG2Assignment
 {
-    class IceCream
+    abstract class IceCream
     {
         public string Option { get; set; }
         public int Scoops { get; set; }
