@@ -20,29 +20,28 @@ namespace S10262115_PRG2Assignment
             if (Scoops == 1)
             {
                 price = 7.00;
-                price = price + Toppings.Count;
-                if (WaffleFlavour == "Red Velvet" || WaffleFlavour == "Charcoal" || WaffleFlavour == "Pandan")
-                {
-                    price = price + 3.00;
-                }
             }
             else if (Scoops == 2)
             {
                 price = 8.50;
-                price = price + Toppings.Count;
-                if (WaffleFlavour == "Red Velvet" || WaffleFlavour == "Charcoal" || WaffleFlavour == "Pandan")
-                {
-                    price = price + 3.00;
-                }
             }
             else if (Scoops == 3)
             {
                 price = 9.50;
-                price = price + Toppings.Count;
-                if (WaffleFlavour == "Red Velvet" || WaffleFlavour == "Charcoal" || WaffleFlavour == "Pandan")
+            }
+
+            foreach (Flavour flavour in Flavours)
+            {
+                if (flavour.Premium)
                 {
-                    price = price + 3.00;
+                    price += 2;
                 }
+            }
+            price = price + Toppings.Count;
+
+            if (WaffleFlavour == "Red Velvet" || WaffleFlavour == "Charcoal" || WaffleFlavour == "Pandan")
+            {
+                price = price + 3.00;
             }
             return price;
         }
