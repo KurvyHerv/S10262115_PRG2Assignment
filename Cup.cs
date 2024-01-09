@@ -13,7 +13,7 @@ namespace S10262115_PRG2Assignment
         {
 
         }
-        public double CalculatePrice()
+        public override double CalculatePrice()
         {
 
         }
