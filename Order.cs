@@ -32,11 +32,12 @@ namespace S10262115_PRG2Assignment
         }
         public double CalculateTotal()
         {
+            double total = 0;
 
         }
         public override string ToString()
         {
-            return base.ToString();
+            return Id + "Time received: " + TimeReceived + TimeFufilled + IceCreamList;
         }
     }
 }
