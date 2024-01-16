@@ -7,7 +7,7 @@
 using S10262115_PRG2Assignment;
 
 //Create Customer Dictionary
-Dictionary<int, Customer> customers = new Dictionary<int, Customer>();
+Dictionary<int, Customer> customersDict = new Dictionary<int, Customer>();
 string[] customersFile = File.ReadAllLines("customers.csv");
 for (int i = 1; i < customersFile.Length; i++)
 {
@@ -17,9 +17,18 @@ for (int i = 1; i < customersFile.Length; i++)
 
     Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), DateTime.Parse(line[2]));
     customer.Rewards = pointCard;
-    customers.Add(customer.MemberId, customer);
+    customersDict.Add(customer.MemberId, customer);
 }
 
+//Qn1 - List all customers
+void PrintCustomers(Dictionary<int, Customer> customersDict)
+{
+    foreach(var customer in customersDict.Values)
+    {
+        Console.WriteLine(customer.ToString());
+    }
+}
+PrintCustomers(customersDict);
 //Menu
 void Menu()
 {
