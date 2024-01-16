@@ -31,4 +31,5 @@ void Menu()
     Console.WriteLine("[5] Display order details of a customer.");
     Console.WriteLine("[6] Modify order details.");
     Console.WriteLine("[0] Exit.");
+    Console.Write("Enter your option: ");
 }
