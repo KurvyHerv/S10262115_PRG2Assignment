@@ -19,3 +19,16 @@ for (int i = 1; i < customersFile.Length; i++)
     customer.Rewards = pointCard;
     customers.Add(customer.MemberId, customer);
 }
+
+//Menu
+void Menu()
+{
+    Console.WriteLine("----------------Menu----------------");
+    Console.WriteLine("[1] Display the information of all customers.");
+    Console.WriteLine("[2] Display all current orders.");
+    Console.WriteLine("[3] Register a new customer.");
+    Console.WriteLine("[4] Create a customer's order.");
+    Console.WriteLine("[5] Display order details of a customer.");
+    Console.WriteLine("[6] Modify order details.");
+    Console.WriteLine("[0] Exit.");
+}
