@@ -29,6 +29,48 @@ void PrintCustomers(Dictionary<int, Customer> customersDict)
     }
 }
 PrintCustomers(customersDict);
+
+string[] orders = File.ReadAllLines("orders.csv");
+List<Order> orderList = new List<Order>();
+List<Flavour> flavourList = new List<Flavour>();
+List<Topping> toppingList = new List<Topping>();
+string[] premiumList = { "Durian", "Ube", "Sea Salt" };
+
+for (int i = 1; i < orders.Length; i++)
+{
+    string[] line = orders[i].Split(",");
+    orderList.Add(new(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2])));
+    for (int j = 8; j < j + Convert.ToInt32(line[5]) - 1; j++)
+    {
+        bool premium = premiumList.Contains(line[j]);
+        flavourList.Add(new(line[j], premium, 1));
+    }
+    for (int j = 11; j <= 14; j++)
+    {
+        if (line[j] != "")
+        {
+            toppingList.Add(new(line[j]));
+        }
+    }
+
+    foreach (Order order in orderList)
+    {
+        if (line[6] == "Cup")
+        {
+            order.IceCreamList.Add(new Cup(line[4], Convert.ToInt32(line[5]), flavourList, toppingList));
+        }
+        if (line[6] == "Cone")
+        {
+            order.IceCreamList.Add(new Cone());
+        }
+        if (line[6] == "Waffle")
+        {
+            order.IceCreamList.Add(new Waffle());
+        }
+
+    }
+}
+
 //Menu
 void Menu()
 {
