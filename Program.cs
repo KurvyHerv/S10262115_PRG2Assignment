@@ -6,15 +6,16 @@
 
 using S10262115_PRG2Assignment;
 
-//Qn 1
-void DisplayCustomer()
+//Create Customer Dictionary
+Dictionary<int, Customer> customers = new Dictionary<int, Customer>();
+string[] customersFile = File.ReadAllLines("customers.csv");
+for (int i = 1; i < customersFile.Length; i++)
 {
-    string[] lines = File.ReadAllLines("customers.csv");
-    for (int i = 0; i < lines.Length; i++)
-    {
-        string[] line = lines[i].Split(",");
-        Console.WriteLine("{0, -15} {1, -15} {2, -15} {3, -20} {4, -20} {5, -15}",
-            line[0], line[1], line[2], line[3], line[4], line[5]);
-    }
+    string[] line = customersFile[i].Split(",");
+    PointCard pointCard = new PointCard(Convert.ToInt32(line[4]), Convert.ToInt32(line[5]));
+    pointCard.Tier = line[3];
+
+    Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), DateTime.Parse(line[2]));
+    customer.Rewards = pointCard;
+    customers.Add(customer.MemberId, customer);
 }
-DisplayCustomer();
