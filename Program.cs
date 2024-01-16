@@ -21,12 +21,11 @@ for (int i = 1; i < customersFile.Length; i++)
 }
 
 //Qn1 - List all customers
-void PrintCustomers(Dictionary<int, Customer> customersDict)
+void ListAllCustomers(Dictionary<int, Customer> customersDict)
 {
-    foreach(var customer in customersDict.Values)
-    {
-        Console.WriteLine(customer.ToString());
-    }
+    Console.WriteLine("[1] Display the information of all customers: ");
+    Console.WriteLine("{0, -15} {1, -15} {2, -15} {3, -15} {4, -15} {5, -15}",
+        )
 }
 PrintCustomers(customersDict);
 
