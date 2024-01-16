@@ -1,4 +1,10 @@
-﻿using System;
+﻿//==========================================================
+// Student Number : S10258053, 
+// Student Name : Soong Chu Wen Rena
+// Partner Name : 
+//==========================================================
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
