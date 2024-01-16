@@ -40,7 +40,7 @@ namespace S10262115_PRG2Assignment
         }
         public override string ToString()
         {
-            return base.ToString() + Name + MemberId + Dob;
+            return "Name: " + Name + "\tMember ID: " + MemberId + "\tDate of Birth" + Dob;
         }
     }
 }
