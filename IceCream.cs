@@ -29,7 +29,18 @@ namespace S10262115_PRG2Assignment
         public abstract double CalculatePrice();
         public override string ToString()
         {
-            return Option + Scoops + Flavours + Toppings;
+            List<string> flavourList = new List<string>();
+            List<string> topppingList = new List<string>();
+            foreach (Flavour flavour in Flavours)
+            {
+                flavourList.Add(flavour.Type);
+            }
+            foreach (Topping topping in Toppings)
+            {
+                topppingList.Add(topping.Type);
+            }
+
+            return "Option: " + Option + " Scoop(s): " + Scoops + " Flavour(s): " +string.Join(", ", flavourList) + " Topping(s): " + string.Join(", ", topppingList);
         }
 
     }

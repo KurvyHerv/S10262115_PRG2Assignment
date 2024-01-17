@@ -1,10 +1,15 @@
 ﻿//==========================================================
-// Student Number : S10258053, 
+// Student Number : S10258053
 // Student Name : Soong Chu Wen Rena
-// Partner Name : 
+// Partner Number : S10262115
+// Partner Name : Hervin Darmawan Sie
 //==========================================================
 
 using S10262115_PRG2Assignment;
+using System.Collections.Generic;
+using System.Linq;
+
+bool toggle = true;
 
 //Create Customer Dictionary
 Dictionary<int, Customer> customersDict = new Dictionary<int, Customer>();
@@ -22,22 +27,30 @@ for (int i = 1; i < customers.Length; i++)
     customersDict.Add(customer.MemberId, customer);
 }
 
-//Create order Dictionary
-string[] orders = File.ReadAllLines("orders.csv");
-List<Order> orderList = new List<Order>();
-List<Flavour> flavourList = new List<Flavour>();
-List<Topping> toppingList = new List<Topping>();
-string[] premiumList = { "Durian", "Ube", "Sea Salt" };
+//Populate Order
+
+    string[] orders = File.ReadAllLines("orders.csv");
+    List<Order> orderList = new List<Order>();
+    string[] premiumList = { "Durian", "Ube", "Sea Salt" };
+    int k = 0;
 
 for (int i = 1; i < orders.Length; i++)
 {
+    List<Flavour> flavourList = new List<Flavour>();
+    List<Topping> toppingList = new List<Topping>();
+    bool dipped = false;
     string[] line = orders[i].Split(",");
     orderList.Add(new(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2])));
-    for (int j = 8; j < j + Convert.ToInt32(line[5]) - 1; j++)
+
+    for (int j = 8; j < 10; j++)
     {
-        bool premium = premiumList.Contains(line[j]);
-        flavourList.Add(new(line[j], premium, 1));
+        if (line[j] != "")
+        {
+            bool premium = premiumList.Contains(line[j]);
+            flavourList.Add(new(line[j], premium, line.Count(str => str.Contains(line[j]))));
+        }
     }
+
     for (int j = 11; j <= 14; j++)
     {
         if (line[j] != "")
@@ -46,23 +59,29 @@ for (int i = 1; i < orders.Length; i++)
         }
     }
 
-    foreach (Order order in orderList)
+    if (line[6] == "TRUE")
     {
-        if (line[6] == "Cup")
-        {
-            order.IceCreamList.Add(new Cup(line[4], Convert.ToInt32(line[5]), flavourList, toppingList));
-        }
-        if (line[6] == "Cone")
-        {
-            order.IceCreamList.Add(new Cone());
-        }
-        if (line[6] == "Waffle")
-        {
-            order.IceCreamList.Add(new Waffle());
-        }
-
+        dipped = true;
     }
+
+    if (line[4] == "Cup")
+    {
+        orderList[k].IceCreamList.Add(new Cup(line[4], Convert.ToInt32(line[5]), flavourList, toppingList));
+        k++;
+    }
+    if (line[4] == "Cone")
+    {
+        orderList[k].IceCreamList.Add(new Cone(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, dipped));
+        k++;
+    }
+    if (line[4] == "Waffle")
+    {
+        orderList[k].IceCreamList.Add(new Waffle(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, line[7]));
+        k++;
+    }
+
 }
+
 
 //====Basic Features====
 //Menu
@@ -95,6 +114,13 @@ static void ListAllCustomers(Dictionary<int, Customer> customersDict)
 }
 
 //2 - List all Current Orders (Hervin)
+void ListAllOrders()
+{
+    foreach (Order order in orderList)
+    {
+        Console.WriteLine(order.ToString());
+    }
+}
 
 //3 - Register a new Customer (Rena)
 static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
@@ -155,3 +181,30 @@ static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 //5 - Display order details of a customer (Hervin)
 
 //6 - Modify order details (Hervin)
+
+
+while (toggle)
+{
+    Menu();
+    string option = Console.ReadLine();
+    switch (option)
+    {
+        case "1":
+            break;
+        case "2":
+            ListAllOrders(); 
+            break;
+        case "3":
+            break;
+        case "4":
+            break;
+        case "5":
+            break;
+        case "6":
+            break;
+        case "0":
+            toggle = false;
+            break;
+    }
+
+}

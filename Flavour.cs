@@ -26,7 +26,7 @@ namespace S10262115_PRG2Assignment
         }
         public override string ToString()
         {
-            return ToString();
+            return Type + Premium + Quantity;
         }
     }
 }

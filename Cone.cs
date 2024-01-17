@@ -52,7 +52,7 @@ namespace S10262115_PRG2Assignment
         }
         public override string ToString()
         {
-            return base.ToString() + Dipped;
+            return base.ToString() + " Dipped?: " + Dipped;
         }
     }
 }
