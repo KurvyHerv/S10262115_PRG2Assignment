@@ -98,7 +98,35 @@ static void ListAllCustomers(Dictionary<int, Customer> customersDict)
 //2 - List all Current Orders (Hervin)
 
 //3 - Register a new Customer (Rena)
+static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
+{
+    //default points& punchcard
+    int defaultPoints = 0;
+    int defaultPunchCard = 0;
 
+    //Prompt for customer name
+    Console.Write("Enter the customer's name: ");
+    string name = Console.ReadLine();
+
+    //Prompt for customer id
+    Console.Write("Enter the customer's id number: ");
+    int customerId = Convert.ToInt32(Console.ReadLine());
+
+    //Prompt for customer dob
+    Console.Write("Enter the customer's date of birth (dd/mm/yyyy): ");
+    DateTime dob = DateTime.Parse(Console.ReadLine());
+
+    //Create Customer Object
+    Customer newCustomer = new Customer(name, customerId, dob);
+
+    //Create Pointcard Object
+    PointCard defaultPointCard = new PointCard(defaultPoints, defaultPunchCard);
+
+    //Assign PointCard obj to customer
+    newCustomer.Rewards = defaultPointCard;
+    customersDict.Add(newCustomer.Id, newCustomer);
+
+}
 //4 - Create a Customer's Order (Rena)
 
 //5 - Display order details of a customer (Hervin)
