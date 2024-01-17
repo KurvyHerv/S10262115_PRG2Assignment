@@ -22,7 +22,6 @@ for (int i = 1; i < customers.Length; i++)
     customersDict.Add(customer.MemberId, customer);
 }
 
-/*
 //Create order Dictionary
 string[] orders = File.ReadAllLines("orders.csv");
 List<Order> orderList = new List<Order>();
@@ -64,7 +63,7 @@ for (int i = 1; i < orders.Length; i++)
 
     }
 }
-*/
+
 //====Basic Features====
 //Menu
 static void Menu()
@@ -100,9 +99,12 @@ static void ListAllCustomers(Dictionary<int, Customer> customersDict)
 //3 - Register a new Customer (Rena)
 static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 {
+    Console.WriteLine("[3] Register new Customer: ");
+
     //default points& punchcard
     int defaultPoints = 0;
     int defaultPunchCard = 0;
+    string defaultTier = "Ordinary";
 
     //Prompt for customer name
     Console.Write("Enter the customer's name: ");
@@ -124,9 +126,30 @@ static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 
     //Assign PointCard obj to customer
     newCustomer.Rewards = defaultPointCard;
+    newCustomer.Rewards.Tier = defaultTier;
     customersDict.Add(newCustomer.Id, newCustomer);
 
+    //append customer information to csv file
+    string newCustomerInfo = $"" +
+            $"{newCustomer.Name}," +
+            $"{newCustomer.MemberId}," +
+            $"{newCustomer.Dob.ToString("dd/mm/yyyy")}," +
+            $"{newCustomer.Rewards.Tier}," +
+            $"{newCustomer.Rewards.Points}," +
+            $"{newCustomer.Rewards.PunchCard}";
+    File.AppendAllText("customers.csv", newCustomerInfo);
+
+    Console.WriteLine("New Customer added. The following information is added: ");
+    Console.WriteLine($"" +
+            $"{newCustomer.Name}," +
+            $"{newCustomer.MemberId}," +
+            $"{newCustomer.Dob.ToString("dd/mm/yyyy")}," +
+            $"{newCustomer.Rewards.Tier}," +
+            $"{newCustomer.Rewards.Points}," +
+            $"{newCustomer.Rewards.PunchCard}");
+    Console.WriteLine("\n");
 }
+
 //4 - Create a Customer's Order (Rena)
 
 //5 - Display order details of a customer (Hervin)
