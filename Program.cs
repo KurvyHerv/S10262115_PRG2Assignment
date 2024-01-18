@@ -28,7 +28,6 @@ for (int i = 1; i < customers.Length; i++)
 }
 
 //Populate Order
-
     string[] orders = File.ReadAllLines("orders.csv");
     List<Order> orderList = new List<Order>();
     string[] premiumList = { "Durian", "Ube", "Sea Salt" };
@@ -101,6 +100,7 @@ static void Menu()
 //1 - List all customers (Rena))
 static void ListAllCustomers(Dictionary<int, Customer> customersDict)
 {
+    Console.WriteLine("\n");
     Console.WriteLine("[1] Display the information of all customers: ");
     Console.WriteLine("{0, -10} {1, -15} {2, -15} {3, -20} {4, -20} {5, -15}",
         "Name", "MemberID", "DOB", "Membership status", "Membership points", "PunchCard");
@@ -116,6 +116,7 @@ static void ListAllCustomers(Dictionary<int, Customer> customersDict)
 //2 - List all Current Orders (Hervin)
 void ListAllOrders()
 {
+    Console.WriteLine("\n");
     foreach (Order order in orderList)
     {
         Console.WriteLine(order.ToString());
@@ -125,6 +126,7 @@ void ListAllOrders()
 //3 - Register a new Customer (Rena)
 static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 {
+    Console.WriteLine("\n");
     Console.WriteLine("[3] Register new Customer: ");
 
     //default points& punchcard
@@ -177,12 +179,17 @@ static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 }
 
 //4 - Create a Customer's Order (Rena)
+static void CreateOrder()
+{
+
+}
 
 //5 - Display order details of a customer (Hervin)
 
 //6 - Modify order details (Hervin)
 
 
+//Initialise methods
 while (toggle)
 {
     Menu();
@@ -190,11 +197,13 @@ while (toggle)
     switch (option)
     {
         case "1":
+            ListAllCustomers(customersDict);
             break;
         case "2":
             ListAllOrders(); 
             break;
         case "3":
+            RegisterNewCustomer(customersDict);
             break;
         case "4":
             break;
