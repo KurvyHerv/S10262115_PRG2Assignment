@@ -101,7 +101,6 @@ static void Menu()
 static void ListAllCustomers(Dictionary<int, Customer> customersDict)
 {
     Console.WriteLine("\n");
-    Console.WriteLine("[1] Display the information of all customers: ");
     Console.WriteLine("{0, -10} {1, -15} {2, -15} {3, -20} {4, -20} {5, -15}",
         "Name", "MemberID", "DOB", "Membership status", "Membership points", "PunchCard");
 
@@ -127,7 +126,6 @@ void ListAllOrders()
 static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 {
     Console.WriteLine("\n");
-    Console.WriteLine("[3] Register new Customer: ");
 
     //default points& punchcard
     int defaultPoints = 0;
@@ -179,9 +177,14 @@ static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 }
 
 //4 - Create a Customer's Order (Rena)
-static void CreateOrder()
+static void CreateOrder(Dictionary<int, Customer> customersDict)
 {
+    //list customers from customers.csv file
+    ListAllCustomers(customersDict);
 
+    //promt user to select customer
+    Console.Write("Input customer ID: ");
+    int customerID = Convert.ToInt32(Console.ReadLine());
 }
 
 //5 - Display order details of a customer (Hervin)
