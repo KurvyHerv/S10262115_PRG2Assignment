@@ -8,6 +8,7 @@
 using S10262115_PRG2Assignment;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 bool toggle = true;
 
@@ -28,10 +29,12 @@ for (int i = 1; i < customers.Length; i++)
 }
 
 //Populate Order
-    string[] orders = File.ReadAllLines("orders.csv");
-    List<Order> orderList = new List<Order>();
-    string[] premiumList = { "Durian", "Ube", "Sea Salt" };
-    int k = 0;
+string[] orders = File.ReadAllLines("orders.csv");
+List<Order> orderList = new List<Order>();
+List<Order> orderDictList = new List<Order>();
+Dictionary<int, List<Order>> orderDict = new Dictionary<int, List<Order>>();
+string[] premiumList = { "Durian", "Ube", "Sea Salt" };
+int k = 0;
 
 for (int i = 1; i < orders.Length; i++)
 {
@@ -65,20 +68,29 @@ for (int i = 1; i < orders.Length; i++)
 
     if (line[4] == "Cup")
     {
+        orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
         orderList[k].IceCreamList.Add(new Cup(line[4], Convert.ToInt32(line[5]), flavourList, toppingList));
-        k++;
     }
     if (line[4] == "Cone")
     {
+        orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
         orderList[k].IceCreamList.Add(new Cone(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, dipped));
-        k++;
     }
     if (line[4] == "Waffle")
     {
+        orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
         orderList[k].IceCreamList.Add(new Waffle(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, line[7]));
-        k++;
     }
-
+    int customerId = Convert.ToInt32(line[1]);
+    if (orderDict.ContainsKey(customerId))
+    {
+        orderDict[customerId].Add(orderList[k]);
+    }
+    else
+    {
+        orderDict.Add(customerId, new List<Order> { orderList[k] });
+    }
+    k++;
 }
 
 
@@ -188,6 +200,24 @@ static void CreateOrder(Dictionary<int, Customer> customersDict)
 }
 
 //5 - Display order details of a customer (Hervin)
+void CustomerOrder()
+{
+    ListAllCustomers(customersDict);
+    try
+    {
+        Console.Write("Input customer ID: ");
+        int customerID = Convert.ToInt32(Console.ReadLine());
+
+        foreach (Order order in orderDict[customerID])
+        {
+            Console.WriteLine(order);
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine (e.Message);
+    }
+}
 
 //6 - Modify order details (Hervin)
 
@@ -211,6 +241,7 @@ while (toggle)
         case "4":
             break;
         case "5":
+            CustomerOrder();
             break;
         case "6":
             break;
