@@ -13,7 +13,7 @@ using System.Reflection.Metadata.Ecma335;
 bool toggle = true;
 
 //Create Customer Dictionary
-Dictionary<int, Customer> customersDict = new Dictionary<int, Customer>();
+Dictionary<int, Customer> customersDict = new Dictionary<int, Customer>();     
 
 //Append data from customer.csv to customersDict
 string[] customers = File.ReadAllLines("customers.csv");
@@ -92,6 +92,7 @@ for (int i = 1; i < orders.Length; i++)
     }
     k++;
 }
+
 
 
 //====Basic Features====
@@ -189,14 +190,54 @@ static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 }
 
 //4 - Create a Customer's Order (Rena)
-static void CreateOrder(Dictionary<int, Customer> customersDict)
+void CreateOrder(Dictionary<int, Customer> customersDict, List<Order> orderlist)
 {
     //list customers from customers.csv file
     ListAllCustomers(customersDict);
 
-    //promt user to select customer
-    Console.Write("Input customer ID: ");
-    int customerID = Convert.ToInt32(Console.ReadLine());
+    //prompt user for customer 
+    Console.Write("Enter customer memberID: ");
+    if (int.TryParse(Console.ReadLine(), out int memberID))
+    {
+        if (customersDict.TryGetValue(memberID, out Customer customer))
+        {
+            try
+            {
+                //create order object
+                Order newOrder = new Order();
+                newOrder.Id = orderList.Count + 1;
+                newOrder.TimeReceived = DateTime.Now;
+
+                //prompt user to entire ice cream order
+                Console.WriteLine("Enter ice cream order details: ");
+
+                do
+                {
+                    Console.Write("Add another ice cream to order? (Y/N): ");
+                } 
+                while (Char.ToUpper(Console.ReadKey().KeyChar) == 'Y');
+                customer.CurrentOrder = newOrder;
+
+                if (customer.Rewards != null && customer.Rewards.Tier == "Gold")
+                {
+                    string idk;
+                }
+                else
+                {
+                    orderList.Add(newOrder);
+                }
+                Console.WriteLine("Order successfully made!");
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid MemberID. Customer not found. ");
+        }
+    }
 }
 
 //5 - Display order details of a customer (Hervin)
@@ -239,6 +280,7 @@ while (toggle)
             RegisterNewCustomer(customersDict);
             break;
         case "4":
+            CreateOrder(customersDict, orderList);
             break;
         case "5":
             CustomerOrder();
