@@ -97,6 +97,10 @@ for (int i = 1; i < orders.Length; i++)
     k++;
 }
 
+//Queue
+Queue<Order> orderQueue = new Queue<Order>();
+Queue<Order> goldQueue = new Queue<Order>();
+
 
 
 //====Basic Features====
@@ -261,6 +265,18 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
             break;
     }
     order.AddIceCream(iceCream);
+
+    customer.CurrentOrder = order;
+    orderDict.Add(orderDict.Count + 1, orderList);
+
+    if (customer.Rewards.Tier == "Gold")
+    {
+        goldQueue.Enqueue(order);
+    }
+    else
+    {
+        orderQueue.Enqueue(order);
+    }
 }
     
 
