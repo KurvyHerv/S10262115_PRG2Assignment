@@ -105,7 +105,7 @@ Queue<Order> goldQueue = new Queue<Order>();
 
 //====Basic Features====
 //Menu
-static void Menu()
+void Menu()
 {
     Console.WriteLine("----------------Menu----------------");
     Console.WriteLine("[1] Display the information of all customers.");
@@ -119,7 +119,7 @@ static void Menu()
 }
 
 //1 - List all customers (Rena))
-static void ListAllCustomers(Dictionary<int, Customer> customersDict)
+void ListAllCustomers(Dictionary<int, Customer> customersDict)
 {
     Console.WriteLine("\n");
     Console.WriteLine("{0, -10} {1, -15} {2, -15} {3, -20} {4, -20} {5, -15}",
@@ -144,7 +144,7 @@ void ListAllOrders()
 }
 
 //3 - Register a new Customer (Rena)
-static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
+void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 {
     Console.WriteLine("\n");
 
