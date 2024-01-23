@@ -146,9 +146,7 @@ void ListAllOrders()
 //3 - Register a new Customer (Rena)
 void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 {
-    Console.WriteLine("\n");
-
-    //default points& punchcard
+    //default points & punchcard
     int defaultPoints = 0;
     int defaultPunchCard = 0;
     string defaultTier = "Ordinary";
