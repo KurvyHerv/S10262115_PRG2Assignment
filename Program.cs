@@ -28,6 +28,9 @@ for (int i = 1; i < customers.Length; i++)
     customersDict.Add(customer.MemberId, customer);
 }
 
+//orders
+Dictionary<int, int> orderIdCustomerId = new Dictionary<int, int>();
+
 //Populate Order
 string[] orders = File.ReadAllLines("orders.csv");
 List<Order> orderList = new List<Order>();
@@ -44,6 +47,7 @@ for (int i = 1; i < orders.Length; i++)
     string[] line = orders[i].Split(",");
     orderList.Add(new(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2])));
 
+    //populate flavourlist
     for (int j = 8; j < 10; j++)
     {
         if (line[j] != "")
@@ -52,7 +56,7 @@ for (int i = 1; i < orders.Length; i++)
             flavourList.Add(new(line[j], premium, line.Count(str => str.Contains(line[j]))));
         }
     }
-
+    //populate topping list
     for (int j = 11; j <= 14; j++)
     {
         if (line[j] != "")
@@ -60,7 +64,7 @@ for (int i = 1; i < orders.Length; i++)
             toppingList.Add(new(line[j]));
         }
     }
-
+    //find if waffle is dipped
     if (line[6] == "TRUE")
     {
         dipped = true;
@@ -190,55 +194,75 @@ static void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 }
 
 //4 - Create a Customer's Order (Rena)
-void CreateOrder(Dictionary<int, Customer> customersDict, List<Order> orderlist)
+void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<Order>> orderDict)
 {
     //list customers from customers.csv file
     ListAllCustomers(customersDict);
 
     //prompt user for customer 
     Console.Write("Enter customer memberID: ");
-    if (int.TryParse(Console.ReadLine(), out int memberID))
+    int id = Convert.ToInt32(Console.ReadLine());
+
+    //retrieve customer id
+    Customer customer = customersDict[id];
+
+    //create new order
+    Order order = new Order();
+
+    //prompt user
+    Console.Write("Enter option: ");
+    string option = Console.ReadLine();
+    Console.Write("Enter number of scoops: ");
+    int scoops = Convert.ToInt32(Console.ReadLine());
+
+    List<Flavour> flavours = new List<Flavour>();
+    Console.Write("Enter flavours: ");
+    string fType = Console.ReadLine();
+    while (fType != null)
     {
-        if (customersDict.TryGetValue(memberID, out Customer customer))
-        {
-            try
-            {
-                //create order object
-                Order newOrder = new Order();
-                newOrder.Id = orderList.Count + 1;
-                newOrder.TimeReceived = DateTime.Now;
+        Console.Write("Is it premium? [True/ False]: ");
+        bool fPremium = Convert.ToBoolean(Console.ReadLine());
+        Console.Write("Enter flavour quantity: ");
+        int fQuantity = Convert.ToInt32(Console.ReadLine());
+        Flavour flavour = new Flavour(fType, fPremium, fQuantity);
+        flavours.Add(flavour);
 
-                //prompt user to entire ice cream order
-                Console.WriteLine("Enter ice cream order details: ");
-
-                do
-                {
-                    Console.Write("Add another ice cream to order? (Y/N): ");
-                } 
-                while (Char.ToUpper(Console.ReadKey().KeyChar) == 'Y');
-                customer.CurrentOrder = newOrder;
-
-                if (customer.Rewards != null && customer.Rewards.Tier == "Gold")
-                {
-                    string idk;
-                }
-                else
-                {
-                    orderList.Add(newOrder);
-                }
-                Console.WriteLine("Order successfully made!");
-            }
-            catch (Exception ex) 
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-        else
-        {
-            Console.WriteLine("Invalid MemberID. Customer not found. ");
-        }
+        Console.Write("Enter flavour [nil to stop]: ");
+        fType = Console.ReadLine();
     }
+
+    List<Topping> toppings = new List<Topping>();
+    Console.Write("Enter toppings: ");
+    string tType = Console.ReadLine();
+    while (tType != null)
+    {
+        Topping topping = new Topping(tType);
+        toppings.Add(topping);
+
+        Console.Write("Enter toppings [nil to stop]: ");
+        tType = Console.ReadLine();
+    }
+
+    IceCream iceCream = null;
+    switch (option)
+    {
+        case "Cup":
+            iceCream = new Cup(option, scoops, flavours, toppings);
+            break;
+        case "Cone":
+            Console.Write("Is ice cream dipped: ");
+            bool dipped = Convert.ToBoolean(Console.ReadLine());
+            iceCream = new Cone(option, scoops, flavours, toppings, dipped);
+            break;
+        case "Waffle":
+            Console.Write("Enter the waffle flavour: ");
+            string wFlavour = Console.ReadLine();
+            iceCream = new Waffle(option, scoops, flavours, toppings, wFlavour);
+            break;
+    }
+    order.AddIceCream(iceCream);
 }
+    
 
 //5 - Display order details of a customer (Hervin)
 void CustomerOrder()
@@ -280,7 +304,7 @@ while (toggle)
             RegisterNewCustomer(customersDict);
             break;
         case "4":
-            CreateOrder(customersDict, orderList);
+            CreateOrder(customersDict, orderDict);
             break;
         case "5":
             CustomerOrder();
