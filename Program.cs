@@ -7,6 +7,7 @@
 
 using S10262115_PRG2Assignment;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -108,7 +109,7 @@ Queue<Order> goldQueue = new Queue<Order>();
 //Menu
 void Menu()
 {
-    Console.WriteLine("----------------Menu----------------");
+    Console.WriteLine("==========Menu==========");
     Console.WriteLine("[1] Display the information of all customers.");
     Console.WriteLine("[2] Display all current orders.");
     Console.WriteLine("[3] Register a new customer.");
@@ -122,7 +123,6 @@ void Menu()
 //1 - List all customers (Rena))
 void ListAllCustomers(Dictionary<int, Customer> customersDict)
 {
-    Console.WriteLine("\n");
     Console.WriteLine("{0, -10} {1, -15} {2, -15} {3, -20} {4, -20} {5, -15}",
         "Name", "MemberID", "DOB", "Membership status", "Membership points", "PunchCard");
 
@@ -137,7 +137,6 @@ void ListAllCustomers(Dictionary<int, Customer> customersDict)
 //2 - List all Current Orders (Hervin)
 void ListAllOrders()
 {
-    Console.WriteLine("\n");
     foreach (Order order in orderList)
     {
         Console.WriteLine(order.ToString());
@@ -362,23 +361,29 @@ while (toggle)
     switch (option)
     {
         case "1":
+            Console.WriteLine("========== [1] Display the information of all customers. ==========");
             ListAllCustomers(customersDict);
             break;
         case "2":
+            Console.WriteLine("========== [2] Display all current orders. ==========");
             ListAllOrders(); 
             break;
         case "3":
+            Console.WriteLine("========== [3] Register a new customer. ==========");
             RegisterNewCustomer(customersDict);
             break;
         case "4":
+            Console.WriteLine("========== [4] Create a customer's order. ==========");
             CreateOrder(customersDict, orderDict);
             break;
         case "5":
+            Console.WriteLine("========== [5] Display order details of a customer. ==========");
             CustomerOrder();
             break;
         case "6":
             break;
         case "0":
+            Console.WriteLine("Bye!");
             toggle = false;
             break;
     }
