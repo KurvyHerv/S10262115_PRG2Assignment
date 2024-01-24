@@ -7,6 +7,7 @@
 
 using S10262115_PRG2Assignment;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 
@@ -152,17 +153,69 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
     string defaultTier = "Ordinary";
 
     //Prompt for customer name
-    Console.Write("Enter the customer's name: ");
-    string name = Console.ReadLine();
+    string name;
+    
+    while (true)
+    {
+        Console.Write("Enter the customer's name: ");
+        name = Console.ReadLine();
+
+        if (!string.IsNullOrWhiteSpace(name) && name.All(char.IsLetter))
+        {
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a valid name. ");
+        }
+    }
 
     //Prompt for customer id
-    Console.Write("Enter the customer's id number: ");
-    int customerId = Convert.ToInt32(Console.ReadLine());
+    int customerId;
+    while (true)
+    {
+        try
+        {
+            Console.Write("Enter the customer's id number: ");
+            string customerid = Console.ReadLine();
+
+            if (customerid.Length != 6)
+            {
+                throw new ArgumentException("Customer ID must have 6 digits. ");
+            }
+            customerId = Convert.ToInt32(customerid);
+            if (customersDict.ContainsKey(customerId))
+            {
+                throw new ArgumentException("Customer ID already exist. Enter valid customer ID.");
+            }
+            break;
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid customer ID. Please enter valid ID. ");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 
     //Prompt for customer dob
-    Console.Write("Enter the customer's date of birth (dd/mm/yyyy): ");
-    DateTime dob = DateTime.Parse(Console.ReadLine());
-
+    DateTime dob;
+    while (true)
+    {
+        try
+        {
+            Console.Write("Enter the customer's date of birth (dd/mm/yyyy): ");
+            dob = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            break;
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid input. Please enter valid data in format dd/MM/yyyy");
+        }
+    }
+    
     //Create Customer Object
     Customer newCustomer = new Customer(name, customerId, dob);
 
@@ -178,7 +231,7 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
     string newCustomerInfo = $"" +
             $"{newCustomer.Name}," +
             $"{newCustomer.MemberId}," +
-            $"{newCustomer.Dob.ToString("dd/mm/yyyy")}," +
+            $"{newCustomer.Dob.ToString("dd/MM/yyyy")}," +
             $"{newCustomer.Rewards.Tier}," +
             $"{newCustomer.Rewards.Points}," +
             $"{newCustomer.Rewards.PunchCard}";
@@ -188,7 +241,7 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
     Console.WriteLine($"" +
             $"{newCustomer.Name}," +
             $"{newCustomer.MemberId}," +
-            $"{newCustomer.Dob.ToString("dd/mm/yyyy")}," +
+            $"{newCustomer.Dob.ToString("dd/MM/yyyy")}," +
             $"{newCustomer.Rewards.Tier}," +
             $"{newCustomer.Rewards.Points}," +
             $"{newCustomer.Rewards.PunchCard}");
