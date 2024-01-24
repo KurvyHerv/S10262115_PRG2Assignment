@@ -14,6 +14,10 @@ using System.Reflection.Metadata.Ecma335;
 
 bool toggle = true;
 
+List<string> options = new List<string> {"Cup", "Cone", "Waffle"};
+List<string> fList = new List<string> {"Vanilla", "Chocolate", "Strawberry"};
+List<string> fPremiumList = new List<string> {"Durian", "Ube", "Sea Salt"};
+
 //Create Customer Dictionary
 Dictionary<int, Customer> customersDict = new Dictionary<int, Customer>();     
 
@@ -248,14 +252,35 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 }
 
 //4 - Create a Customer's Order (Rena)
-void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<Order>> orderDict)
+void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<Order>> orderDict, List<string> flist, List<string> fPremiumList, List<string> options)
 {
     //list customers from customers.csv file
     ListAllCustomers(customersDict);
 
     //prompt user for customer 
+    int id;
     Console.Write("Enter customer memberID: ");
-    int id = Convert.ToInt32(Console.ReadLine());
+    while (true)
+    {
+        try
+        {
+            id = Convert.ToInt32(Console.ReadLine());
+            
+            if (!customersDict.ContainsKey(id))
+            {
+                throw new ArgumentException("Member ID does not exist. Enter valid ID. ");
+            }
+            break;
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid input. Enter valid ID.");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 
     //retrieve customer id
     Customer customer = customersDict[id];
@@ -306,6 +331,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
     }
     //flavour
     List<Flavour> flavours = new List<Flavour>();
+
     Console.Write("Enter flavours [nil to stop]: ");
     string fType = Console.ReadLine();
     while (fType != "nil")
@@ -319,14 +345,6 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
             {
                 Console.Write("Is it premium? [True/ False]: ");
                 fPremium = Convert.ToBoolean(Console.ReadLine());
-
-                Console.Write("Enter flavour quantity: ");
-                fQuantity = Convert.ToInt32(Console.ReadLine());
-                if (fQuantity <= 0)
-                {
-                    throw new ArgumentException("Enter valid flavour quantity. ");
-                }
-                break;
             }
             catch (FormatException)
             {
