@@ -264,20 +264,79 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
     Order order = new Order();
 
     //prompt user
-    Console.Write("Enter option: ");
-    string option = Console.ReadLine();
-    Console.Write("Enter number of scoops: ");
-    int scoops = Convert.ToInt32(Console.ReadLine());
-
-    List<Flavour> flavours = new List<Flavour>();
-    Console.Write("Enter flavours: ");
-    string fType = Console.ReadLine();
-    while (fType != null)
+    string option;
+    int scoops;
+    //option
+    while (true)
     {
-        Console.Write("Is it premium? [True/ False]: ");
-        bool fPremium = Convert.ToBoolean(Console.ReadLine());
-        Console.Write("Enter flavour quantity: ");
-        int fQuantity = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Enter option [waffle/cup/cone] : ");
+        option = Console.ReadLine().ToLower();
+
+        if (option == "cup" || option == "waffle" || option == "cone")
+        {
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Invalid option. Please enter [waffle/cup/cone]. ");
+        }
+    }
+    //scoops
+    while (true)
+    {
+        try
+        {
+            Console.Write("Enter number of scoops: ");
+            scoops = Convert.ToInt32(Console.ReadLine());
+
+            if (scoops <= 0)
+            {
+                throw new ArgumentException("Enter valid number of scoops. Minimum 1 scoop. ");
+            }
+            break;
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid input. Please enter valid input. ");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }       
+    }
+    //flavour
+    List<Flavour> flavours = new List<Flavour>();
+    Console.Write("Enter flavours [nil to stop]: ");
+    string fType = Console.ReadLine();
+    while (fType != "nil")
+    {
+        bool fPremium;
+        int fQuantity;
+
+        while (true)
+        {
+            try
+            {
+                Console.Write("Is it premium? [True/ False]: ");
+                fPremium = Convert.ToBoolean(Console.ReadLine());
+
+                Console.Write("Enter flavour quantity: ");
+                fQuantity = Convert.ToInt32(Console.ReadLine());
+                if (fQuantity <= 0)
+                {
+                    throw new ArgumentException("Enter valid flavour quantity. ");
+                }
+                break;
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input. Please enter valid input. ");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
         Flavour flavour = new Flavour(fType, fPremium, fQuantity);
         flavours.Add(flavour);
 
@@ -288,7 +347,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
     List<Topping> toppings = new List<Topping>();
     Console.Write("Enter toppings: ");
     string tType = Console.ReadLine();
-    while (tType != null)
+    while (tType != "nil")
     {
         Topping topping = new Topping(tType);
         toppings.Add(topping);
@@ -314,11 +373,134 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
             iceCream = new Waffle(option, scoops, flavours, toppings, wFlavour);
             break;
     }
+
+    //prompt user if they want to add another icecream
+    string addIceCream;
+    do
+    {
+        Console.Write("Do you want to add another ice cream? [Y/N] :");
+        addIceCream = Console.ReadLine().ToUpper();
+    }
+    while (addIceCream != "Y" && addIceCream != "N");
+
+    while (addIceCream == "Y")
+    {
+
+        //prompt user
+        string addOption;
+        int addScoops;
+        //option
+        while (true)
+        {
+            Console.Write("Enter option [waffle/cup/cone] : ");
+            addOption = Console.ReadLine().ToLower();
+
+            if (addOption == "cup" || addOption == "waffle" || addOption == "cone")
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Invalid option. Please enter [waffle/cup/cone]. ");
+            }
+        }
+        //scoops
+        while (true)
+        {
+            try
+            {
+                Console.Write("Enter number of scoops: ");
+                addScoops = Convert.ToInt32(Console.ReadLine());
+
+                if (addScoops <= 0)
+                {
+                    throw new ArgumentException("Enter valid number of scoops. Minimum 1 scoop. ");
+                }
+                break;
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input. Please enter valid input. ");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        //flavour
+        List<Flavour> flavoursList = new List<Flavour>();
+        Console.Write("Enter flavours [nil to stop]: ");
+        string addfType = Console.ReadLine();
+        while (addfType != "nil")
+        {
+            bool fPremium;
+            int fQuantity;
+
+            while (true)
+            {
+                try
+                {
+                    Console.Write("Is it premium? [True/ False]: ");
+                    fPremium = Convert.ToBoolean(Console.ReadLine());
+
+                    Console.Write("Enter flavour quantity: ");
+                    fQuantity = Convert.ToInt32(Console.ReadLine());
+                    if (fQuantity <= 0)
+                    {
+                        throw new ArgumentException("Enter valid flavour quantity. ");
+                    }
+                    break;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid input. Please enter valid input. ");
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            Flavour flavour = new Flavour(fType, fPremium, fQuantity);
+            flavours.Add(flavour);
+
+            Console.Write("Enter flavour [nil to stop]: ");
+            fType = Console.ReadLine();
+        }
+
+        List<Topping> toppingsList = new List<Topping>();
+        Console.Write("Enter toppings: ");
+        string addtType = Console.ReadLine();
+        while (tType != "nil")
+        {
+            Topping topping = new Topping(tType);
+            toppings.Add(topping);
+
+            Console.Write("Enter toppings [nil to stop]: ");
+            tType = Console.ReadLine();
+        }
+
+        IceCream iceCreams = null;
+        switch (option)
+        {
+            case "Cup":
+                iceCreams = new Cup(option, scoops, flavours, toppings);
+                break;
+            case "Cone":
+                Console.Write("Is ice cream dipped: ");
+                bool dipped = Convert.ToBoolean(Console.ReadLine());
+                iceCreams = new Cone(option, scoops, flavours, toppings, dipped);
+                break;
+            case "Waffle":
+                Console.Write("Enter the waffle flavour: ");
+                string wFlavour = Console.ReadLine();
+                iceCreams = new Waffle(option, scoops, flavours, toppings, wFlavour);
+                break;
+        }
+    }
     order.AddIceCream(iceCream);
 
     customer.CurrentOrder = order;
     orderDict.Add(orderDict.Count + 1, orderList);
-
     if (customer.Rewards.Tier == "Gold")
     {
         goldQueue.Enqueue(order);
