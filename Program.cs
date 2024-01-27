@@ -13,11 +13,6 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 
 bool toggle = true;
-
-List<string> options = new List<string> {"Cup", "Cone", "Waffle"};
-List<string> fList = new List<string> {"Vanilla", "Chocolate", "Strawberry"};
-List<string> fPremiumList = new List<string> {"Durian", "Ube", "Sea Salt"};
-
 //Create Customer Dictionary
 Dictionary<int, Customer> customersDict = new Dictionary<int, Customer>();     
 
@@ -252,11 +247,14 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 }
 
 //4 - Create a Customer's Order (Rena)
-void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<Order>> orderDict, List<string> flist, List<string> fPremiumList, List<string> options)
+void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<Order>> orderDict)
 {
+    List<string> fList = new List<string> { "Vanilla", "Chocolate", "Strawberry" };
+    List<string> fPremiumList = new List<string> { "Durian", "Ube", "Sea Salt" };
+
     //list customers from customers.csv file
     ListAllCustomers(customersDict);
-
+            
     //prompt user for customer 
     int id;
     Console.Write("Enter customer memberID: ");
@@ -290,11 +288,10 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
 
     //prompt user
     string option;
-    int scoops;
     //option
     while (true)
     {
-        Console.Write("Enter option [waffle/cup/cone] : ");
+        Console.Write("Enter serving option [waffle/cup/cone] : ");
         option = Console.ReadLine().ToLower();
 
         if (option == "cup" || option == "waffle" || option == "cone")
@@ -307,16 +304,17 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
         }
     }
     //scoops
+    int scoops;
+    Console.Write("Enter number of scoops: ");
     while (true)
     {
         try
         {
-            Console.Write("Enter number of scoops: ");
             scoops = Convert.ToInt32(Console.ReadLine());
 
-            if (scoops <= 0)
+            if (scoops < 1 || scoops > 3)
             {
-                throw new ArgumentException("Enter valid number of scoops. Minimum 1 scoop. ");
+                throw new ArgumentException("Enter valid number of scoops. [1 - 3 scoops]. ");
             }
             break;
         }
@@ -324,43 +322,46 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
         {
             Console.WriteLine("Invalid input. Please enter valid input. ");
         }
-        catch (ArgumentException ex)
+        catch (OverflowException)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine("Invalid input");
         }       
     }
     //flavour
     List<Flavour> flavours = new List<Flavour>();
 
-    Console.Write("Enter flavours [nil to stop]: ");
-    string fType = Console.ReadLine();
-    while (fType != "nil")
+    // Print flavour list
+    Console.WriteLine("\nFlavour list:");
+    for (int i = 0; i < fList.Count; i++)
     {
-        bool fPremium;
-        int fQuantity;
+        Console.WriteLine(fList[i]);
+    }
+    
+    // Print premium flavour list
+    Console.WriteLine("\nPremium flavour list:");
+    for (int i =0; i < fPremiumList.Count; i++)
+    {
+        Console.WriteLine(fPremiumList[i]);
+    }
 
+    for (int i = 1; i <= scoops; i++)
+    {
+        Console.Write("Enter ice cream flavour: ");
+        string fType = Console.ReadLine();
         while (true)
         {
-            try
-            {
-                Console.Write("Is it premium? [True/ False]: ");
-                fPremium = Convert.ToBoolean(Console.ReadLine());
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine("Invalid input. Please enter valid input. ");
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine(ex.Message);
+            bool fPremium;
+            int fQuantity;
+
+            Console.Write("Is it premium?[True/ False]: ");
+            fPremium = Convert.ToBoolean(Console.ReadLine());
+
+            Flavour flavour = new Flavour(fType, fPremium, fQuantity);
+            flavours.Add(flavour);
             }
         }
-        Flavour flavour = new Flavour(fType, fPremium, fQuantity);
-        flavours.Add(flavour);
-
-        Console.Write("Enter flavour [nil to stop]: ");
-        fType = Console.ReadLine();
     }
+    
 
     List<Topping> toppings = new List<Topping>();
     Console.Write("Enter toppings: ");
