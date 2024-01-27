@@ -24,14 +24,14 @@ namespace S10262115_PRG2Assignment
             Id = id;
             TimeReceived = timereceived;
         }
-        public void ModifyIceCream(int orderid)
+        public void ModifyIceCream(int iceCream)
         {
-            int orderno = orderid - 1;
             Console.WriteLine("Enter new option: ");
-            IceCreamList[orderno].Option = Console.ReadLine();
+            IceCreamList[iceCream].Option = Console.ReadLine();
+
             Console.WriteLine("Enter new number of scoops: ");
-            IceCreamList[orderno].Scoops = Convert.ToInt32(Console.ReadLine());
-            IceCreamList[orderno].Flavours.Clear();
+            IceCreamList[iceCream].Scoops = Convert.ToInt32(Console.ReadLine());
+            IceCreamList[iceCream].Flavours.Clear();
             Console.WriteLine("Enter new flavour type (or nil to stop adding): ");
             string flavourtype = Console.ReadLine();
             Console.WriteLine("Is it premium? (True/False): ");
@@ -39,7 +39,7 @@ namespace S10262115_PRG2Assignment
             Console.WriteLine("Enter new flavour quantity: ");
             int flavourquantity = Convert.ToInt32(Console.ReadLine());
             Flavour flavour = new Flavour(flavourtype, flavourpremium, flavourquantity);
-            IceCreamList[orderno].Flavours.Add(flavour);
+            IceCreamList[iceCream].Flavours.Add(flavour);
             while (flavourtype != "nil")
             {
                 Console.WriteLine("Enter new flavour (or nil to stop adding): ");
@@ -49,19 +49,19 @@ namespace S10262115_PRG2Assignment
                 Console.WriteLine("Enter new flavour quantity: ");
                 flavourquantity = Convert.ToInt32(Console.ReadLine());
                 flavour = new Flavour(flavourtype, flavourpremium, flavourquantity);
-                IceCreamList[orderno].Flavours.Add(flavour);
+                IceCreamList[iceCream].Flavours.Add(flavour);
             }
-            IceCreamList[orderno].Toppings.Clear();
+            IceCreamList[iceCream].Toppings.Clear();
             Console.WriteLine("Enter new topping (or nil to stop adding): ");
             string toppingtype = Console.ReadLine();
             Topping topping = new Topping(toppingtype);
-            IceCreamList[orderno].Toppings.Add(topping);
+            IceCreamList[iceCream].Toppings.Add(topping);
             while (toppingtype != "nil")
             {
                 Console.WriteLine("Enter new topping (or nil to stop adding): ");
                 toppingtype = Console.ReadLine();
                 topping = new Topping(toppingtype);
-                IceCreamList[orderno].Toppings.Add(topping);
+                IceCreamList[iceCream].Toppings.Add(topping);
             }
         }
         public void AddIceCream(IceCream iceCream)
@@ -85,12 +85,14 @@ namespace S10262115_PRG2Assignment
         }
         public override string ToString()
         {
-            
+
+
+            string iceCreams = "";
             for (int i = 0; i < IceCreamList.Count; i++)
             {
-
+                iceCreams += $"{IceCreamList[i].ToString()} | ";
             }
-            return "ID: " + Id + "\tTime Received: " + TimeReceived + "\tTime Fullfilled: " + TimeFullfilled + "\tIceCreamList: " + IceCreamList[0].ToString();
+            return "ID: " + Id + "\tTime Received: " + TimeReceived + "\tTime Fullfilled: " + TimeFullfilled + "\tIceCreamList: " + iceCreams;
         }
     }
 }
