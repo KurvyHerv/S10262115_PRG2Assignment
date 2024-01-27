@@ -85,7 +85,12 @@ namespace S10262115_PRG2Assignment
         }
         public override string ToString()
         {
-            return "ID: " + Id + "\tTime Received: " + TimeReceived + "\tTime Fullfilled: " + TimeFullfilled + "\tIceCreamList: " + IceCreamList[0].ToString() ;
+            
+            for (int i = 0; i < IceCreamList.Count; i++)
+            {
+
+            }
+            return "ID: " + Id + "\tTime Received: " + TimeReceived + "\tTime Fullfilled: " + TimeFullfilled + "\tIceCreamList: " + IceCreamList[0].ToString();
         }
     }
 }

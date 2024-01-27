@@ -42,6 +42,7 @@ string[] orders = File.ReadAllLines("orders.csv");
 List<Order> orderList = new List<Order>();
 List<Order> orderDictList = new List<Order>();
 Dictionary<int, List<Order>> orderDict = new Dictionary<int, List<Order>>();
+List<string> ids = new List<string>();
 string[] premiumList = { "Durian", "Ube", "Sea Salt" };
 int k = 0;
 
@@ -51,7 +52,16 @@ for (int i = 1; i < orders.Length; i++)
     List<Topping> toppingList = new List<Topping>();
     bool dipped = false;
     string[] line = orders[i].Split(",");
-    orderList.Add(new(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2])));
+    
+
+    if (ids.Contains(line[0]))
+    {
+        continue;
+    }
+    else
+    {
+        orderList.Add(new(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2])));
+    }
 
     //populate flavourlist
     for (int j = 8; j < 10; j++)
@@ -76,30 +86,45 @@ for (int i = 1; i < orders.Length; i++)
         dipped = true;
     }
 
-    if (line[4] == "Cup")
+    
+    if (ids.Contains(line[0]))
     {
-        orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
-        orderList[k].IceCreamList.Add(new Cup(line[4], Convert.ToInt32(line[5]), flavourList, toppingList));
-    }
-    if (line[4] == "Cone")
-    {
-        orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
-        orderList[k].IceCreamList.Add(new Cone(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, dipped));
-    }
-    if (line[4] == "Waffle")
-    {
-        orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
-        orderList[k].IceCreamList.Add(new Waffle(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, line[7]));
-    }
-    int customerId = Convert.ToInt32(line[1]);
-    if (orderDict.ContainsKey(customerId))
-    {
-        orderDict[customerId].Add(orderList[k]);
+        if (line[4] == "Cup")
+        {
+            customersDict[Convert.ToInt32(line[1])].OrderHistory[0].IceCreamList.Add(new Cup(line[4], Convert.ToInt32(line[5]), flavourList, toppingList));
+        }
+        if (line[4] == "Cone")
+        {
+            customersDict[Convert.ToInt32(line[1])].OrderHistory[0].IceCreamList.Add(new Cone(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, dipped));
+        }
+        if (line[4] == "Waffle")
+        {
+            customersDict[Convert.ToInt32(line[1])].OrderHistory[0].IceCreamList.Add(new Waffle(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, line[7]));
+        }
     }
     else
     {
-        orderDict.Add(customerId, new List<Order> { orderList[k] });
+        if (line[4] == "Cup")
+        {
+            orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
+            orderList[k].IceCreamList.Add(new Cup(line[4], Convert.ToInt32(line[5]), flavourList, toppingList));
+            ids.Add(line[0]);
+        }
+        if (line[4] == "Cone")
+        {
+            orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
+            orderList[k].IceCreamList.Add(new Cone(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, dipped));
+            ids.Add(line[0]);
+        }
+        if (line[4] == "Waffle")
+        {
+            orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
+            orderList[k].IceCreamList.Add(new Waffle(line[4], Convert.ToInt32(line[5]), flavourList, toppingList, line[7]));
+            ids.Add(line[0]);
+        }
     }
+    int customerId = Convert.ToInt32(line[1]);
+    customersDict[customerId].OrderHistory.Add(orderList[k]);
     k++;
 }
 
@@ -539,7 +564,11 @@ void CustomerOrder()
         Console.Write("Input customer ID: ");
         int customerID = Convert.ToInt32(Console.ReadLine());
 
-        foreach (Order order in orderDict[customerID])
+        Console.WriteLine("current order: ");
+        Console.WriteLine(customersDict[customerID].CurrentOrder);
+
+        Console.WriteLine("past orders: ");
+        foreach (Order order in customersDict[customerID].OrderHistory)
         {
             Console.WriteLine(order);
         }
@@ -574,7 +603,7 @@ while (toggle)
             break;
         case "4":
             Console.WriteLine("========== [4] Create a customer's order. ==========");
-            CreateOrder(customersDict, orderDict);
+            //CreateOrder(customersDict, orderDict);
             break;
         case "5":
             Console.WriteLine("========== [5] Display order details of a customer. ==========");
