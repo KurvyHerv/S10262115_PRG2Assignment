@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,13 +32,17 @@ namespace S10262115_PRG2Assignment
 
             Console.WriteLine("Enter new number of scoops: ");
             IceCreamList[iceCream].Scoops = Convert.ToInt32(Console.ReadLine());
+
             IceCreamList[iceCream].Flavours.Clear();
-            Console.WriteLine("Enter new flavour type (or nil to stop adding): ");
+            Console.WriteLine("Enter new flavour type: ");
             string flavourtype = Console.ReadLine();
+
             Console.WriteLine("Is it premium? (True/False): ");
             bool flavourpremium = Convert.ToBoolean(Console.ReadLine());
+
             Console.WriteLine("Enter new flavour quantity: ");
             int flavourquantity = Convert.ToInt32(Console.ReadLine());
+
             Flavour flavour = new Flavour(flavourtype, flavourpremium, flavourquantity);
             IceCreamList[iceCream].Flavours.Add(flavour);
             while (flavourtype != "nil")
@@ -51,16 +56,18 @@ namespace S10262115_PRG2Assignment
                 flavour = new Flavour(flavourtype, flavourpremium, flavourquantity);
                 IceCreamList[iceCream].Flavours.Add(flavour);
             }
+
             IceCreamList[iceCream].Toppings.Clear();
             Console.WriteLine("Enter new topping (or nil to stop adding): ");
-            string toppingtype = Console.ReadLine();
+            string toppingType = Console.ReadLine();
             Topping topping = new Topping(toppingtype);
             IceCreamList[iceCream].Toppings.Add(topping);
-            while (toppingtype != "nil")
+
+            while (toppingType != "nil")
             {
                 Console.WriteLine("Enter new topping (or nil to stop adding): ");
-                toppingtype = Console.ReadLine();
-                topping = new Topping(toppingtype);
+                toppingType = Console.ReadLine();
+                topping = new Topping(toppingType);
                 IceCreamList[iceCream].Toppings.Add(topping);
             }
         }
