@@ -27,14 +27,14 @@ namespace S10262115_PRG2Assignment
             MemberId = memberId;
             Dob = dob;
         }
-        public Order MakeOrder()
-        {
-            string[] orders = File.ReadAllLines("orders.csv");
-            for (int i = 0; i < orders.Length; i++)
-            {
-                string[] line = orders[i].Split(',');
-            }
-        }
+        //public Order MakeOrder()
+        //{
+        //    string[] orders = File.ReadAllLines("orders.csv");
+        //    for (int i = 0; i < orders.Length; i++)
+        //    {
+        //        string[] line = orders[i].Split(',');
+        //    }
+        //}
         public bool IsBirthday()
         {
             return DateTime.Today.Month == Dob.Month && DateTime.Today.Day == Dob.Day;

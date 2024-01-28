@@ -595,82 +595,108 @@ void CustomerOrder()
     }
 }
 
-////6 - Modify order details (Hervin)
-//ListAllCustomers(customersDict);
-//try
-//{
-//    Console.Write("Input customer ID: ");
-//    int customerID = Convert.ToInt32(Console.ReadLine());
+//6 - Modify order details (Hervin)
+void modifyOrder()
+{
+    ListAllCustomers(customersDict);
 
-//    Console.WriteLine("current order: ");
-//    foreach (IceCream iceCream in customersDict[customerID].CurrentOrder.IceCreamList)
-//    {
-//        Console.WriteLine(iceCream);
-//    }
-//    Console.WriteLine("[1] Choose an existing ice cream to modify");
-//    Console.WriteLine("[2] Add a new ice cream to the order");
-//    Console.WriteLine("[3] Choose an existing ice cream to delete from the order");
-//    Console.Write("Enter your option: ");
-//    string option = Console.ReadLine();
+    Console.Write("Input customer ID: ");
+    int customerID = Convert.ToInt32(Console.ReadLine());
+    customersDict[customerID].CurrentOrder = new Order(9999999, orderList[0].TimeReceived);
+    customersDict[customerID].CurrentOrder.AddIceCream(orderList[0].IceCreamList[0]);
+    customersDict[customerID].CurrentOrder.AddIceCream(orderList[1].IceCreamList[0]);
+    Console.WriteLine("current order: ");
+    for (int i = 0; i < customersDict[customerID].CurrentOrder.IceCreamList.Count; i++)
+    {
+        Console.WriteLine($"{i+1}. {customersDict[customerID].CurrentOrder.IceCreamList[i]}");
+    }
+    Console.WriteLine("[1] Choose an existing ice cream to modify");
+    Console.WriteLine("[2] Add a new ice cream to the order");
+    Console.WriteLine("[3] Choose an existing ice cream to delete from the order");
+    Console.Write("Enter your option: ");
+    string option = Console.ReadLine();
 
-//    switch (option)
-//    {
-//        case "1":
-//            Console.Write("Which ice cream: ");
-//            int iceCream = Convert.ToInt32(Console.ReadLine());
-//            customersDict[customerID].ModifyIceCream(iceCream - 1);
-//            break;
-//        case "2":
-//            List<Flavour> flavours = new List<Flavour>();
-//            Console.WriteLine("Enter option: ");
-//            string option = Console.ReadLine();
+    switch (option)
+    {
+        case "1":
+            Console.Write("Which ice cream: ");
+            int iceCream = Convert.ToInt32(Console.ReadLine());
+            customersDict[customerID].CurrentOrder.ModifyIceCream(iceCream - 1);
+            break;
+        case "2":
+            List<Flavour> flavours = new List<Flavour>();
+            List<Topping> toppings = new List<Topping>();
+            string waffleFlavour = "";
+            bool dipped = false;
+            Console.Write("Enter ice cream type: ");
+            string type = Console.ReadLine().ToLower();
+            if (type == "waffle")
+            {
+                Console.Write("Enter waffle flavour: ");
+                waffleFlavour = Console.ReadLine();
+            }
+            else if (type == "cone")
+            {
+                Console.Write("Would you like your cone to be dipped? (Y/N): ");
+                string dippedStr = Console.ReadLine().ToUpper();
+                if (dippedStr == "Y")
+                {
+                    dipped = true;
+                }
+                else { dipped = false; }
+            }
+            Console.Write("Enter number of scoops: ");
+            int scoops = Convert.ToInt32(Console.ReadLine());
+            for (int i = scoops; i > 0; i--)
+            {
+                Console.WriteLine($"Enter new flavour | remaining: {i}: ");
+                string flavourtype = Console.ReadLine();
+                bool premium = premiumList.Contains(flavourtype);
+                Console.WriteLine("Enter new flavour quantity: ");
+                int flavourquantity = Convert.ToInt32(Console.ReadLine());
+                Flavour flavour = new Flavour(flavourtype, premium, flavourquantity);
+                flavours.Add(flavour);
+            }
 
-//            Console.WriteLine("Enter number of scoops: ");
-//            int scoops = Convert.ToInt32(Console.ReadLine());
-//            for (int i = 0; i <= scoops; i++)
-//            {
-//                Console.WriteLine("Enter flavour type: ");
-//                string flavourtype = Console.ReadLine();
+            Console.WriteLine("Enter new topping (or nil for no toppings): ");
+            string toppingType = Console.ReadLine();
+            Topping topping = new Topping(toppingType);
+            toppings.Add(topping);
 
-//                Console.WriteLine("Is it premium? (True/False): ");
-//                bool flavourpremium = Convert.ToBoolean(Console.ReadLine());
+            while (toppingType != "nil")
+            {
+                Console.WriteLine("Enter new topping (or nil to stop adding): ");
+                toppingType = Console.ReadLine();
+                topping = new Topping(toppingType);
+                toppings.Add(topping);
+            }
+            if (type == "waffle")
+            {
+                customersDict[customerID].CurrentOrder.AddIceCream(new Waffle(type, scoops, flavours, toppings, waffleFlavour));
+            }
+            else if (type == "cone")
+            {
+                customersDict[customerID].CurrentOrder.AddIceCream(new Cone(type, scoops, flavours, toppings, dipped));
+            }
+            else
+            {
+                customersDict[customerID].CurrentOrder.AddIceCream(new Cup(type, scoops, flavours, toppings));
+            }
+            break;
+        case "3":
+            if (customersDict[customerID].CurrentOrder.IceCreamList.Count >= 1)
+            {
+                Console.Write("Which ice cream: ");
+                customersDict[customerID].CurrentOrder.DeleteIceCream(Convert.ToInt32(Console.ReadLine()));
+            }
+            else
+            {
+                Console.WriteLine("You cannot have zero ice creams in an order");
+            }
+            break;
+    }
 
-//                Console.WriteLine("Enter new flavour quantity: ");
-//                int flavourquantity = Convert.ToInt32(Console.ReadLine());
-
-//                Flavour flavour = new Flavour(flavourtype, flavourpremium, flavourquantity);
-//                flavours.Add(flavour);
-//            }
-
-//            Console.WriteLine("Enter new topping (or nil to stop adding): ");
-//            string toppingType = Console.ReadLine();
-//            Topping topping = new Topping(toppingtype);
-//            IceCreamList[iceCream].Toppings.Add(topping);
-
-//            while (toppingType != "nil")
-//            {
-//                Console.WriteLine("Enter new topping (or nil to stop adding): ");
-//                toppingType = Console.ReadLine();
-//                topping = new Topping(toppingType);
-//                IceCreamList[iceCream].Toppings.Add(topping);
-//            }
-//            break;
-//        case "3":
-//            if (customersDict[customerID].CurrentOrder.IceCreamList.Count > 1)
-//            {
-//                Console.Write("Which ice cream: ");
-//            }
-//            else
-//            {
-//                Console.WriteLine("You cannot have zero ice creams in an order");
-//            }
-//            break;
-//    }
-//}
-//catch (Exception e)
-//{
-//    Console.WriteLine(e.Message);
-//}
+}
 
 
 //Initialise methods
@@ -701,6 +727,7 @@ while (toggle)
             CustomerOrder();
             break;
         case "6":
+            modifyOrder();
             break;
         case "0":
             Console.WriteLine("Bye!");

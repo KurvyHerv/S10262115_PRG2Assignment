@@ -25,60 +25,97 @@ namespace S10262115_PRG2Assignment
             Id = id;
             TimeReceived = timereceived;
         }
-        public void ModifyIceCream(int iceCream)
+        public void ModifyIceCream(int index)
         {
+            List<Flavour> flavours = new List<Flavour>();
+            List<Topping> toppings = new List<Topping>();
+            string[] premiumList = { "Durian", "Ube", "Sea Salt" };
+            IceCream iceCream = IceCreamList[index];
+            string waffleFlavour = "";
+            bool dipped = false;
+
+
             Console.WriteLine("Enter new option: ");
-            IceCreamList[iceCream].Option = Console.ReadLine();
+            string option = Console.ReadLine().ToLower(); 
+
+            if (option == "waffle")
+            {
+                Console.Write("Enter waffle flavour: ");
+                waffleFlavour = Console.ReadLine();
+            }
+            else if (option == "cone")
+            {
+                Console.Write("Would you like your cone to be dipped? (Y/N): ");
+                string dippedStr = Console.ReadLine().ToUpper();
+                if (dippedStr == "Y")
+                {
+                    dipped = true;
+                }
+            }
 
             Console.WriteLine("Enter new number of scoops: ");
-            IceCreamList[iceCream].Scoops = Convert.ToInt32(Console.ReadLine());
+            int scoops = Convert.ToInt32(Console.ReadLine());
 
-            IceCreamList[iceCream].Flavours.Clear();
-            Console.WriteLine("Enter new flavour type: ");
-            string flavourtype = Console.ReadLine();
-
-            Console.WriteLine("Is it premium? (True/False): ");
-            bool flavourpremium = Convert.ToBoolean(Console.ReadLine());
-
-            Console.WriteLine("Enter new flavour quantity: ");
-            int flavourquantity = Convert.ToInt32(Console.ReadLine());
-
-            Flavour flavour = new Flavour(flavourtype, flavourpremium, flavourquantity);
-            IceCreamList[iceCream].Flavours.Add(flavour);
-            while (flavourtype != "nil")
+            for (int i = scoops; i > 0; i--)
             {
-                Console.WriteLine("Enter new flavour (or nil to stop adding): ");
-                flavourtype = Console.ReadLine();
-                Console.WriteLine("Is it premium? (True/False): ");
-                flavourpremium = Convert.ToBoolean(Console.ReadLine());
+                Console.WriteLine($"Enter new flavour | remaining: {i}: ");
+                string flavourtype = Console.ReadLine();
+                bool premium = premiumList.Contains(flavourtype);
                 Console.WriteLine("Enter new flavour quantity: ");
-                flavourquantity = Convert.ToInt32(Console.ReadLine());
-                flavour = new Flavour(flavourtype, flavourpremium, flavourquantity);
-                IceCreamList[iceCream].Flavours.Add(flavour);
+                int flavourquantity = Convert.ToInt32(Console.ReadLine());
+                Flavour flavour = new Flavour(flavourtype, premium, flavourquantity);
+                flavours.Add(flavour);
             }
+            Console.WriteLine("Enter new topping (or nil for no topping): ");
 
-            IceCreamList[iceCream].Toppings.Clear();
-            Console.WriteLine("Enter new topping (or nil to stop adding): ");
             string toppingType = Console.ReadLine();
-            Topping topping = new Topping(toppingtype);
-            IceCreamList[iceCream].Toppings.Add(topping);
-
-            while (toppingType != "nil")
+            if (toppingType != "nil")
             {
-                Console.WriteLine("Enter new topping (or nil to stop adding): ");
-                toppingType = Console.ReadLine();
-                topping = new Topping(toppingType);
-                IceCreamList[iceCream].Toppings.Add(topping);
+                Topping topping = new Topping(toppingType);
+                iceCream.Toppings.Add(topping);
+                toppings.Add(topping);
+                while (toppingType != "nil")
+                {
+                    Console.WriteLine("Enter new topping (or nil to stop adding): ");
+                    toppingType = Console.ReadLine();
+                    if ( toppingType == "nil")
+                    {
+                        break;
+                    }
+                    topping = new Topping(toppingType);
+                    toppings.Add(topping);
+                }
             }
+
+            if (option == "waffle")
+            {
+                IceCreamList[index] = new Waffle(option, scoops, flavours, toppings, waffleFlavour);
+                Console.WriteLine("Added Successfully");
+            }
+            else if (option == "cone")
+            {
+                IceCreamList[index] = new Cone(option, scoops, flavours, toppings, dipped);
+                Console.WriteLine("Added Successfully");
+            }
+            else
+            {
+                IceCreamList[index] = new Cup(option, scoops, flavours, toppings);
+                Console.WriteLine("Added Successfully");
+
+            }
+            Console.WriteLine("Failed to add ice cream");
+            
+
+            
         }
         public void AddIceCream(IceCream iceCream)
         {
             IceCreamList.Add(iceCream);
             Console.WriteLine("Added successfully.");
         }
-        public void DeleteIceCream(int num)
+        public void DeleteIceCream(int index)
         {
-            IceCreamList.RemoveAt(num);
+            IceCreamList.RemoveAt(index);
             Console.WriteLine("Deleted successfully.");
         }
         public double CalculateTotal()
