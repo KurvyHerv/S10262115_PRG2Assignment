@@ -551,8 +551,29 @@ void CustomerOrder()
     ListAllCustomers(customersDict);
     try
     {
-        Console.Write("Input customer ID: ");
-        int customerID = Convert.ToInt32(Console.ReadLine());
+        int customerID;
+        while (true)
+        {
+            Console.Write("Enter customer ID: ");
+            try
+            {
+                customerID = Convert.ToInt32(Console.ReadLine());
+
+                if (!customersDict.ContainsKey(customerID))
+                {
+                    throw new ArgumentException("Customer ID does not exist. Enter valid ID.");
+                }
+                break;
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input. Enter valid ID.");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
         Console.WriteLine("====Current order: ====");
         if (customersDict[customerID].CurrentOrder == null)
@@ -565,9 +586,16 @@ void CustomerOrder()
         }
 
         Console.WriteLine("\n====Past orders: ====");
-        foreach (Order order in customersDict[customerID].OrderHistory)
+        if (customersDict[customerID].OrderHistory == null)
         {
-            Console.WriteLine($"\n{order}");
+            Console.WriteLine("No past order. ");
+        }
+        else
+        {
+            foreach (Order order in customersDict[customerID].OrderHistory)
+            {
+                Console.WriteLine($"\n{order}");
+            }
         }
     }
     catch (Exception e)
@@ -583,10 +611,12 @@ void modifyOrder()
 
     Console.Write("Input customer ID: ");
     int customerID = Convert.ToInt32(Console.ReadLine());
+
     customersDict[customerID].CurrentOrder = new Order(9999999, orderList[0].TimeReceived);
     customersDict[customerID].CurrentOrder.AddIceCream(orderList[0].IceCreamList[0]);
     customersDict[customerID].CurrentOrder.AddIceCream(orderList[1].IceCreamList[0]);
     Console.WriteLine("current order: ");
+
     for (int i = 0; i < customersDict[customerID].CurrentOrder.IceCreamList.Count; i++)
     {
         Console.WriteLine($"{i+1}. {customersDict[customerID].CurrentOrder.IceCreamList[i]}");
