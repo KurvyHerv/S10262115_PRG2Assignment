@@ -35,7 +35,7 @@ namespace S10262115_PRG2Assignment
             bool dipped = false;
 
 
-            Console.WriteLine("Enter new option: ");
+            Console.Write("Enter new option: ");
             string option = Console.ReadLine().ToLower();
 
             if (option == "waffle")
@@ -53,7 +53,7 @@ namespace S10262115_PRG2Assignment
                 }
             }
 
-            Console.WriteLine("Enter new number of scoops: ");
+            Console.Write("Enter new number of scoops: ");
             int scoops = Convert.ToInt32(Console.ReadLine());
 
             for (int i = scoops; i > 0; i--)
@@ -61,12 +61,12 @@ namespace S10262115_PRG2Assignment
                 Console.WriteLine($"Enter new flavour | remaining: {i}: ");
                 string flavourtype = Console.ReadLine();
                 bool premium = premiumList.Contains(flavourtype);
-                Console.WriteLine("Enter new flavour quantity: ");
+                Console.Write("Enter new flavour quantity: ");
                 int flavourquantity = Convert.ToInt32(Console.ReadLine());
                 Flavour flavour = new Flavour(flavourtype, premium, flavourquantity);
                 flavours.Add(flavour);
             }
-            Console.WriteLine("Enter new topping (or nil for no topping): ");
+            Console.Write("Enter new topping (or nil for no topping): ");
 
             string toppingType = Console.ReadLine();
             if (toppingType != "nil")
@@ -131,7 +131,10 @@ namespace S10262115_PRG2Assignment
             {
                 iceCreams += $"{IceCreamList[i].ToString()} | ";
             }
-            return "ID: " + Id + "\tTime Received: " + TimeReceived + "\tTime Fullfilled: " + TimeFullfilled + "\tIceCreamList: " + iceCreams;
+            return $"Order ID: {Id}" + 
+                $"\nTime Received: {TimeReceived}" + 
+                $"\nTime Fulfilled: {TimeFullfilled}" +
+                $"\n====IceCream details: ==={iceCreams}"; 
         }
     }
 }

@@ -51,7 +51,7 @@ namespace S10262115_PRG2Assignment
             while (true)
             {
                 //show list of serving options
-                Console.WriteLine("\nAvailable serving options: ");
+                Console.WriteLine("\n====Available serving options: ====");
                 Console.WriteLine("1. Cup");
                 Console.WriteLine("2. Waffle");
                 Console.WriteLine("3. Cone");
@@ -73,7 +73,7 @@ namespace S10262115_PRG2Assignment
                 while (true)
                 {
                     //show list of available waffle flavours
-                    Console.WriteLine("\nAvailable waffle flavour: ");
+                    Console.WriteLine("\n====Available waffle flavour: ====");
                     Console.WriteLine("1. red velvet");
                     Console.WriteLine("2. charcoal ");
                     Console.WriteLine("3. pandan");
@@ -117,7 +117,7 @@ namespace S10262115_PRG2Assignment
             int scoops;
             while (true)
             {
-                Console.Write("\nEnter number of ice cream scoops: ");
+                Console.Write("\nEnter number of ice cream scoops[1-3]: ");
                 scoops = Convert.ToInt32(Console.ReadLine());   
 
                 if (scoops > 0 && scoops < 4)
@@ -134,7 +134,7 @@ namespace S10262115_PRG2Assignment
                 bool premium = false;
                 while (true)
                 {
-                    Console.WriteLine("\n Available flavours: ");
+                    Console.WriteLine("\n====Available flavours: ====");
                     Console.WriteLine("\nNormal flavours: ");
                     Console.WriteLine("1. Vanilla");
                     Console.WriteLine("2. Chocolate");
@@ -150,7 +150,7 @@ namespace S10262115_PRG2Assignment
                     {
                         break;
                     }
-                    else { Console.WriteLine("Enter valid ice cream flavour. "); }
+                    else { Console.WriteLine("Invalid input. Enter valid ice cream flavour. "); }
                 }
                 if (premiumList.Contains(flavourType))
                     {
@@ -168,7 +168,7 @@ namespace S10262115_PRG2Assignment
             while (true)
             {
                 string toppingType;
-                Console.WriteLine("\n Available toppings:");
+                Console.WriteLine("\n====Available toppings: ====");
                 Console.WriteLine("1. Sprinkles");
                 Console.WriteLine("2. Oreos");
                 Console.WriteLine("3. Sago");
@@ -191,8 +191,6 @@ namespace S10262115_PRG2Assignment
                     Console.WriteLine("Invalid input. Please try again.");
                 }
             }
-
-
 
             switch (option)
             {

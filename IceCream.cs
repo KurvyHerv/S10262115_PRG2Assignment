@@ -39,8 +39,10 @@ namespace S10262115_PRG2Assignment
             {
                 topppingList.Add(topping.Type);
             }
-
-            return "Option: " + Option + " Scoop(s): " + Scoops + " Flavour(s): " +string.Join(", ", flavourList) + " Topping(s): " + string.Join(", ", topppingList);
+            return $"\nOption: {Option}"+
+                $"\nScoops: {Scoops}"+
+                $"\nFlavour(s) {string.Join(", ", flavourList)}"+
+                $"\nTopping(s) {string.Join(", ", topppingList)}";
         }
 
     }
