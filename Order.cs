@@ -36,7 +36,7 @@ namespace S10262115_PRG2Assignment
 
 
             Console.WriteLine("Enter new option: ");
-            string option = Console.ReadLine().ToLower(); 
+            string option = Console.ReadLine().ToLower();
 
             if (option == "waffle")
             {
@@ -76,7 +76,7 @@ namespace S10262115_PRG2Assignment
                 toppings.Add(topping);
                 while (toppingType != "nil")
                 {
-                    Console.WriteLine("Enter new topping (or nil to stop adding): ");
+                    Console.Write("Enter new topping (or nil to stop adding): ");
                     toppingType = Console.ReadLine();
                     if ( toppingType == "nil")
                     {
