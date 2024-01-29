@@ -296,8 +296,30 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
 
     ListAllCustomers(customersDict);
 
-    Console.Write("Enter customer ID: ");
-    int customerID = Convert.ToInt32(Console.ReadLine());
+    int customerID;
+    while (true)
+    {
+        Console.Write("Enter customer ID: ");
+        try
+        {
+            customerID = Convert.ToInt32(Console.ReadLine());
+
+            if (!customersDict.ContainsKey(customerID))
+            {
+                throw new ArgumentException("Customer ID does not exist. Enter valid ID.");
+            }
+            break;
+        }
+        catch(FormatException)
+        {
+            Console.WriteLine("Invalid input. Enter valid ID.");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
     Customer customer = customersDict[customerID];
 
     int orderId = 0;

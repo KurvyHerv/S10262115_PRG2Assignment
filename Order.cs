@@ -103,10 +103,7 @@ namespace S10262115_PRG2Assignment
                 Console.WriteLine("Added Successfully");
 
             }
-            Console.WriteLine("Failed to add ice cream");
-            
-
-            
+            Console.WriteLine("Failed to add ice cream"); 
         }
         public void AddIceCream(IceCream iceCream)
         {
@@ -129,8 +126,6 @@ namespace S10262115_PRG2Assignment
         }
         public override string ToString()
         {
-
-
             string iceCreams = "";
             for (int i = 0; i < IceCreamList.Count; i++)
             {

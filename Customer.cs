@@ -31,7 +31,8 @@ namespace S10262115_PRG2Assignment
         {
             List<Flavour> flavours = new List<Flavour>();
             List<Topping> toppings = new List<Topping>();
-            string[] premiumList = { "Durian", "Ube", "Sea Salt" };
+            string[] premiumList = { "durian", "ube", "sea salt" };
+            string[] normalList = { "vanilla", "chocolate", "strawberry" };
 
             string waffleFlavour = "";
             bool dipped = false;
@@ -39,40 +40,104 @@ namespace S10262115_PRG2Assignment
             Order order = new Order();
             IceCream? iceCream = null;
 
+            //prompt user for order details
             Console.WriteLine("====Enter order details====");
-            Console.Write("Enter serving option");
-            string option = Console.ReadLine().ToLower();
+            
+            //prompt serving option
+            string option;
+            while (true)
+            {
+                Console.Write("Enter serving option: ");
+                option = Console.ReadLine().ToLower();
 
+                if (option == "cup" || option == "waffle" || option == "cone")
+                {
+                    break;
+                }
+                else { Console.WriteLine("Invalid option. Please enter [waffle/cone/cup]. "); }
+            }
+
+            //prompt (waffle-flavour)/(cone-dipped)
             if (option == "waffle")
             {
-                Console.WriteLine("Enter waffle flavour: ");
-                waffleFlavour = Console.ReadLine();
+                while (true)
+                {
+                    Console.Write("Enter waffle flavour: ");
+                    waffleFlavour = Console.ReadLine().ToLower();
+
+                    if (waffleFlavour == "red velvet" ||  waffleFlavour == "charcoal" || waffleFlavour == "pandan")
+                    {
+                        break;
+                    }
+                    else { Console.WriteLine("Invalid waffle flavour. Please enter [red velvet/charcoal/pandan]. "); }
+                }
+                
             }
             else if (option == "cone")
             {
-                Console.WriteLine("Would your like your cone to be dipped? (Y/N): ");
-                string dippedStf = Console.ReadLine().ToUpper();
+                string dippedStf;
+                while (true)
+                {
+                    Console.Write("Would your like your cone to be dipped? (Y/N): ");
+                    dippedStf = Console.ReadLine().ToUpper();
+
+                    if (dippedStf != "Y" && dippedStf != "N")
+                    {
+                        Console.WriteLine("Invalid input. Please enter [Y/N]. ");
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
                 if (dippedStf == "Y")
                 {
                     dipped = true;
                 }
             }
 
-            Console.Write("Enter numbr of ice cream scoops: ");
-            int scoops = Convert.ToInt32(Console.ReadLine());
+            //prompt ice cream scoops
+            int scoops;
+            while (true)
+            {
+                Console.Write("Enter number of ice cream scoops: ");
+                scoops = Convert.ToInt32(Console.ReadLine());   
+
+                if (scoops > 0 && scoops < 4)
+                {
+                    break;
+                }
+                else { Console.WriteLine("Enter valid number of scoops [1-3]"); }
+            }          
 
             for (int i = scoops; i > 0; i--)
             {
-                Console.Write($"===Enter icecream flavour | remaining: {i} ==== ");
-                string flavourType = Console.ReadLine();
-                bool premium = premiumList.Contains(flavourType);
+                Console.WriteLine($"===Enter icecream flavour | remaining: {i} ==== ");
+                string flavourType;
+                bool premium = false;
+                while (true)
+                {
+                    Console.Write("Enter ice cream flavour: ");
+                    flavourType = Console.ReadLine();
+                    if (flavourType == "vanilla" || flavourType == "chocolate" || flavourType == "strawberry" || flavourType == "durian" || flavourType == "ube" || flavourType == "sea salt")
+                    {
+                        break;
+                    }
+                    else { Console.WriteLine("Enter valid ice cream flavour. "); }
+                }
+                if (premiumList.Contains(flavourType))
+                    {
+                        premium = true;
+                    }
 
+                
                 Console.Write("Enter flavour quantity: ");
                 int flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
                 Flavour flavour = new Flavour(flavourType, premium, flavourQuantity);
                 flavours.Add(flavour);
             }
+
             Console.WriteLine("Enter toppings [nil for no toppings]: ");
 
             string toppingType = Console.ReadLine();
@@ -112,7 +177,6 @@ namespace S10262115_PRG2Assignment
             CurrentOrder = new Order(id, DateTime.Now);
             CurrentOrder.IceCreamList.Add(iceCream);
             return CurrentOrder;
-
         }
         public bool IsBirthday()
         {
