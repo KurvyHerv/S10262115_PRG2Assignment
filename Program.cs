@@ -40,7 +40,7 @@ Dictionary<int, int> orderIdCustomerId = new Dictionary<int, int>();
 //Populate Order
 string[] orders = File.ReadAllLines("orders.csv");
 List<Order> orderList = new List<Order>();
-Dictionary<int, List<Order>> orderDict = new Dictionary<int, List<Order>>();
+Dictionary<Order, int> orderDict = new Dictionary<Order, int>();
 List<string> ids = new List<string>();
 string[] premiumList = { "Durian", "Ube", "Sea Salt" };
 int k = 0;
@@ -130,6 +130,7 @@ for (int i = 1; i < orders.Length; i++)
         }
     }
     int customerId = Convert.ToInt32(line[1]);
+    orderDict.Add(orderList[k], customerId);
     customersDict[customerId].OrderHistory.Add(orderList[k]);
     k++;
 }
@@ -151,6 +152,7 @@ void Menu()
     Console.WriteLine("[4] Create a customer's order.");
     Console.WriteLine("[5] Display order details of a customer.");
     Console.WriteLine("[6] Modify order details.");
+    Console.WriteLine("[7] Process current order in queue");
     Console.WriteLine("[0] Exit.");
     Console.Write("Enter your option: ");
 }
@@ -172,9 +174,9 @@ void ListAllCustomers(Dictionary<int, Customer> customersDict)
 //2 - List all Current Orders (Hervin)
 void ListAllOrders()
 {
-    foreach (Order order in orderList)
+    foreach (int customerId in customersDict.Keys)
     {
-        Console.WriteLine(order.ToString());
+        Console.WriteLine(customersDict[customerId].CurrentOrder);
     }
 }
 
@@ -411,12 +413,12 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
     if (customer.Rewards.Tier == "Gold")
     {
         goldQueue.Enqueue(order);
-        Console.WriteLine("Order added to gold queueu. ");
+        Console.WriteLine("Order added to gold queue. ");
     }
     else
     {
         orderQueue.Enqueue(order);
-        Console.WriteLine("Order added to queueu. ");
+        Console.WriteLine("Order added to queue. ");
     }
     Console.WriteLine("Order added successfully. ");
     Console.WriteLine("Order summary: ");
@@ -550,6 +552,28 @@ void modifyOrder()
 
 }
 
+// Process order and checkout
+void processOrder()
+{
+    if (goldQueue.Count !> 0)
+    {
+        Order currentOrder = orderQueue.Dequeue();
+        if (currentOrder != null)
+        {
+            for (int i = 0; i < currentOrder.IceCreamList.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {currentOrder.IceCreamList[i]}");
+            }
+            Console.WriteLine($"Total price: {currentOrder.CalculateTotal()}");
+            Console.WriteLine($"Membership status: {customersDict[orderDict[currentOrder]].Rewards.Tier}");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Gold queue exist");
+    }
+}
+
 
 //Initialise methods
 while (toggle)
@@ -572,7 +596,7 @@ while (toggle)
             break;
         case "4":
             Console.WriteLine("========== [4] Create a customer's order. ==========");
-            CreateOrder(customersDict, orderDict);
+            //CreateOrder(customersDict, orderDict);
             break;
         case "5":
             Console.WriteLine("========== [5] Display order details of a customer. ==========");
@@ -580,6 +604,9 @@ while (toggle)
             break;
         case "6":
             modifyOrder();
+            break;
+        case "7":
+            processOrder();
             break;
         case "0":
             Console.WriteLine("Bye!");
