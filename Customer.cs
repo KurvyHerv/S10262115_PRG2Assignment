@@ -41,7 +41,7 @@ namespace S10262115_PRG2Assignment
 
             Console.WriteLine("====Enter order details====");
             Console.Write("Enter serving option");
-            string option = Console.ReadLine();
+            string option = Console.ReadLine().ToLower();
 
             if (option == "waffle")
             {
@@ -96,16 +96,23 @@ namespace S10262115_PRG2Assignment
 
             switch (option)
             {
-                case "Cup":
+                case "cup":
                     iceCream = new Cup(option, scoops, flavours, toppings);
                     break;
-                case "Cone":
+                case "cone":
                     iceCream = new Cone(option, scoops, flavours, toppings, dipped);
                     break;
-                case "Waffle":
+                case "waffle":
                     iceCream = new Waffle(option, scoops, flavours, toppings, waffleFlavour);
                     break;
             }
+
+            int id = 0;
+
+            CurrentOrder = new Order(id, DateTime.Now);
+            CurrentOrder.IceCreamList.Add(iceCream);
+            return CurrentOrder;
+
         }
         public bool IsBirthday()
         {
