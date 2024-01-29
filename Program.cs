@@ -169,7 +169,7 @@ void ListAllCustomers(Dictionary<int, Customer> customersDict)
 }
 
 //2 - List all Current Orders (Hervin)
-void ListAllOrders()
+void ListAllOrders(Dictionary<int, Customer> customersDict)
 {
     foreach (int customerId in customersDict.Keys)
     {
@@ -466,10 +466,22 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 premium = true;
             }
 
+            int flavourQuantity;
+            while (true)
+            {
+                Console.Write("Enter flavour quantity: ");
+                flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-            Console.Write("Enter flavour quantity: ");
-            int flavourQuantity = Convert.ToInt32(Console.ReadLine());
-
+                if (flavourQuantity < scoops || flavourQuantity > scoops)
+                {
+                    Console.WriteLine("Invalid input. Please enter valid input. ");
+                }
+                else
+                {
+                    i = scoops - i;
+                    break;
+                }
+            }
             Flavour flavour = new Flavour(flavourType, premium, flavourQuantity);
             flavours1.Add(flavour);
         }
@@ -703,7 +715,7 @@ while (toggle)
             break;
         case "2":
             Console.WriteLine("\n========== [2] Display all current orders. ==========");
-            ListAllOrders(); 
+            ListAllOrders(customersDict); 
             break;
         case "3":
             Console.WriteLine("\n========== [3] Register a new customer. ==========");

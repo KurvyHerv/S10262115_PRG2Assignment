@@ -157,10 +157,22 @@ namespace S10262115_PRG2Assignment
                         premium = true;
                     }
 
-                
-                Console.Write("Enter flavour quantity: ");
-                int flavourQuantity = Convert.ToInt32(Console.ReadLine());
+                int flavourQuantity;
+                while (true)
+                {
+                    Console.Write("Enter flavour quantity: ");
+                    flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
+                    if (flavourQuantity < scoops || flavourQuantity > scoops)
+                    {
+                        Console.WriteLine("Invalid input. Please enter valid input. ");
+                    }
+                    else
+                    {
+                        i = scoops - i;
+                        break;
+                    }
+                }
                 Flavour flavour = new Flavour(flavourType, premium, flavourQuantity);
                 flavours.Add(flavour);
             }
