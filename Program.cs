@@ -8,13 +8,16 @@
 using Microsoft.VisualBasic.FileIO;
 using S10262115_PRG2Assignment;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
+using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Transactions;
 
@@ -32,7 +35,7 @@ for (int i = 1; i < customers.Length; i++)
 
     Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), DateTime.Parse(line[2]));
     customer.Rewards = pointCard;
-    customersDict.Add(customer.MemberId, customer);
+    customersDict.Add(customer.MemberId, customer); 
 }
 
 //Populate Order
@@ -183,7 +186,6 @@ void ListAllOrders(Dictionary<int, Customer> customersDict)
         }
     }
     if (toggle == false) { Console.WriteLine("No current orders"); }
-    
 }
 
 //3 - Register a new Customer (Rena)
@@ -202,13 +204,13 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
         Console.Write("Enter the customer's name: ");
         name = Console.ReadLine();
 
-        if (!string.IsNullOrWhiteSpace(name) && name.All(char.IsLetter))
+        if (!string.IsNullOrWhiteSpace(name) && name.All(char.IsLetter)) //check if customer name is blank/integar
         {
             break;
         }
         else
         {
-            Console.WriteLine("Invalid input. Please enter a valid name. ");
+            Console.WriteLine("Invalid input. Please enter a valid name. "); 
         }
     }
 
@@ -221,20 +223,19 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
             Console.Write("Enter the customer's id number: ");
             string customerid = Console.ReadLine();
 
-            if (customerid.Length != 6)
+            if (customerid.Length != 6) //check if customerID has 6 digits. If not invalid input
             {
                 throw new ArgumentException("Customer ID must have 6 digits. ");
             }
 
             customerId = Convert.ToInt32(customerid);
-            if (customersDict.ContainsKey(customerId))
+            if (customersDict.ContainsKey(customerId)) //check if customerID exists already. If not invalid input
             {
                 throw new ArgumentException("Customer ID already exist. Enter valid customer ID.");
             }
             break;
-
         }
-        catch (FormatException)
+        catch (FormatException) //checks if customerID has alphebets. if not invalid input
         {
             Console.WriteLine("Invalid customer ID. Please enter valid ID. ");
         }
@@ -251,7 +252,7 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
         try
         {
             Console.Write("Enter the customer's date of birth (dd/mm/yyyy): ");
-            dob = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            dob = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture); //checks if datetime is valid format
             break;
         }
         catch (FormatException)
@@ -281,6 +282,7 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
             $"{newCustomer.Rewards.PunchCard}";
     File.AppendAllText("customers.csv", newCustomerInfo);
 
+    //display new customer
     Console.WriteLine("New Customer added. The following information is added: ");
     Console.WriteLine($"" +
             $"{newCustomer.Name}," +
@@ -294,7 +296,6 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 //4 - Create a Customer's Order (Rena)
 void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<Order>> orderDict)
 {
-    //this is for the repeat
     List<Flavour> flavours = new List<Flavour>();
     List<Topping> toppings = new List<Topping>();
     string[] premiumList = { "Durian", "Ube", "Sea Salt" };
@@ -314,13 +315,13 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
         {
             customerID = Convert.ToInt32(Console.ReadLine());
 
-            if (!customersDict.ContainsKey(customerID))
+            if (!customersDict.ContainsKey(customerID)) //check if customer exists
             {
                 throw new ArgumentException("Customer ID does not exist. Enter valid ID.");
             }
             break;
         }
-        catch(FormatException)
+        catch(FormatException) //check if customerID is int
         {
             Console.WriteLine("Invalid input. Enter valid ID.");
         }
@@ -341,17 +342,17 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
     {
         if (order1.Id > orderId)
         {
-            orderId = order1.Id;
+            orderId = order1.Id; //create new order ID
         }
     }
     foreach (int customerId in customersDict.Keys)
     {
-        if (customersDict[customerId].CurrentOrder != null)
+        if (customersDict[customerId].CurrentOrder != null) //checks if customerID exists in current order
         {
             int id = customersDict[customerId].CurrentOrder.Id;
-            if (id > orderId)
+            if (id > orderId) 
             {
-                orderId = id;
+                orderId = id; //links new order with current order
             }
         }
     }
@@ -369,11 +370,11 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
         Console.Write("Do you want to add another ice cream[Y/N]: ");
         add = Console.ReadLine().ToUpper();
 
-        if (add != "Y" && add != "N")
+        if (add != "Y" && add != "N") //checks if valid input Y/N
         {
             Console.WriteLine("Invalid input. Please enter Y/N.");
         }
-        else if (add == "Y")
+        else if (add == "Y") //if customer wants another ice cream, prompt for order details
         {
             List<Flavour> flavours1 = new List<Flavour>();
             List<Topping> toppings1 = new List<Topping>();
@@ -394,7 +395,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 Console.Write("\nEnter serving option: ");
                 option = Console.ReadLine().ToLower();
 
-                if (option == "cup" || option == "waffle" || option == "cone")
+                if (option == "cup" || option == "waffle" || option == "cone") //check if option is valid
                 {
                     break;
                 }
@@ -419,7 +420,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
 
                     if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan" || waffleFlavour == "original")
                     {
-                        break;
+                        break; //check if waffle flavour is valid
                     }
                     else { Console.WriteLine("Invalid waffle flavour. Please enter [red velvet/charcoal/pandan]. "); }
                 }
@@ -433,7 +434,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                     Console.Write("\nWould your like your cone to be dipped? (Y/N): ");
                     dippedStf = Console.ReadLine().ToUpper();
 
-                    if (dippedStf != "Y" && dippedStf != "N")
+                    if (dippedStf != "Y" && dippedStf != "N") //check if input is valid Y/N
                     {
                         Console.WriteLine("Invalid input. Please enter [Y/N]. ");
                     }
@@ -444,7 +445,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 }
                 if (dippedStf == "Y")
                 {
-                    dipped = true;
+                    dipped = true; //bool dipped = true when cone is to be dipped
                 }
             }
 
@@ -457,13 +458,13 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 {
                     scoops = Convert.ToInt32(Console.ReadLine());
 
-                    if (scoops < 1 || scoops > 3)
+                    if (scoops < 1 || scoops > 3) //checks if scoops is between 1 and 3
                     {
                         throw new ArgumentException("Enter valid number of scoops [1-3]");
                     }
                     break;
                 }
-                catch (FormatException)
+                catch (FormatException) //check if input is int
                 {
                     Console.WriteLine("Invalid input. Please try again.");
                 }
@@ -473,13 +474,14 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 }
             }
 
-            for (int i = scoops; i > 0;)
+            for (int i = scoops; i > 0;) //when quota of ice cream scoops has not been met, for loops
             {
                 Console.WriteLine($"\n===Enter icecream flavour | remaining: {i} ==== ");
                 string flavourType;
                 bool premium = false;
                 while (true)
                 {
+                    //list available flavours
                     Console.WriteLine("\n====Available flavours: ====");
                     Console.WriteLine("\nNormal flavours: ");
                     Console.WriteLine("1. Vanilla");
@@ -494,16 +496,16 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                     flavourType = Console.ReadLine();
                     if (flavourType == "vanilla" || flavourType == "chocolate" || flavourType == "strawberry" || flavourType == "durian" || flavourType == "ube" || flavourType == "sea salt")
                     {
-                        break;
+                        break; //check if flavour type is valid
                     }
                     else { Console.WriteLine("Invalid input. Please enter valid ice cream flavour. "); }
                 }
                 if (premiumList.Contains(flavourType))
                 {
-                    premium = true;
+                    premium = true; //checks if flavour type is premium or normal
                 }
 
-
+                //prompt for number of scoops for chosen flavour
                 int flavourQuantity;
                 while (true)
                 {
@@ -512,18 +514,18 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                     {
                         flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                        if (flavourQuantity == 0 || flavourQuantity > i)
+                        if (flavourQuantity == 0 || flavourQuantity > i) //checks is scoops for chosen is flavour between 1 and scoops chosen
                         {
                             Console.WriteLine("Invalid input. Please enter valid input. ");
                         }
                         else
                         {
-                            i -= flavourQuantity;
+                            i -= flavourQuantity; // scoops - flavourQuantity to check if quota of scoops has been met. If not loops again
                             break;
                         }
                         break;
                     }
-                    catch (FormatException)
+                    catch (FormatException) //checks if input is int
                     {
                         Console.WriteLine("Invalid input. Please try again. ");
                     }
@@ -536,8 +538,11 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 flavours1.Add(flavour);
             }
 
+            //prompt for toppings
             while (true)
             {
+
+                //list toppings list
                 string toppingType;
                 Console.WriteLine("\n====Available toppings: ====");
                 Console.WriteLine("1. Sprinkles");
@@ -550,9 +555,9 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
 
                 if (toppingType == "nil")
                 {
-                    break;
+                    break; //checks if user wants topping (if not no topping added)
                 }
-                else if (toppingType == "nil" || toppingType == "sprinkles" || toppingType == "oreos" || toppingType == "sago" || toppingType == "mochi")
+                else if (toppingType == "nil" || toppingType == "sprinkles" || toppingType == "oreos" || toppingType == "sago" || toppingType == "mochi") //check if input is valid
                 {
                     Topping topping = new Topping(toppingType);
                     toppings1.Add(topping);
@@ -579,7 +584,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
         else { break; }
     }
 
-    if (customer.Rewards.Tier == "Gold")
+    if (customer.Rewards.Tier == "Gold") //if the customer has a gold-tier Pointcard, append their order to the back of the gold members order queue
     {
         goldQueue.Enqueue(order);
         Console.WriteLine("\n====Order added to gold queue.==== ");
@@ -607,15 +612,15 @@ void CustomerOrder()
         Console.Write("Enter customer ID: ");
         try
         {
-            customerID = Convert.ToInt32(Console.ReadLine());
+            customerID = Convert.ToInt32(Console.ReadLine()); 
 
-            if (!customersDict.ContainsKey(customerID))
+            if (!customersDict.ContainsKey(customerID)) //checks if customerid exists
             {
                 throw new ArgumentException("Customer ID does not exist. Enter valid ID.");
             }
             break;
         }
-        catch (FormatException)
+        catch (FormatException) //checks if input is int
         {
             Console.WriteLine("Invalid input. Enter valid ID.");
         }
@@ -626,23 +631,23 @@ void CustomerOrder()
     }
 
     Console.WriteLine("====Current order: ====");
-    if (customersDict[customerID].CurrentOrder == null)
+    if (customersDict[customerID].CurrentOrder == null) //checks if there are any current order
     {
         Console.WriteLine("No current orders");
     }
     else
     {
-        Console.WriteLine(customersDict[customerID].CurrentOrder);
+        Console.WriteLine(customersDict[customerID].CurrentOrder); //displays order
     }
 
     Console.WriteLine("\n====Past orders: ====");
-    if (customersDict[customerID].OrderHistory == null)
+    if (customersDict[customerID].OrderHistory == null) //checks if there is any past orders
     {
         Console.WriteLine("No past order. ");
     }
     else
     {
-        foreach (Order order in customersDict[customerID].OrderHistory)
+        foreach (Order order in customersDict[customerID].OrderHistory) //displays order
         {
             Console.WriteLine($"\n{order}");
         }
@@ -652,6 +657,7 @@ void CustomerOrder()
 //6 - Modify order details (Hervin)
 void modifyOrder()
 {
+    //list customers
     Console.WriteLine("\n====Customer List: ====");
     ListAllCustomers(customersDict);
 
@@ -664,13 +670,13 @@ void modifyOrder()
         {
             customerID = Convert.ToInt32(Console.ReadLine());
 
-            if (!customersDict.ContainsKey(customerID))
+            if (!customersDict.ContainsKey(customerID)) //checks if customer id exists
             {
                 throw new ArgumentException("Customer ID does not exist. Enter valid ID.");
             }
             break;
         }
-        catch (FormatException)
+        catch (FormatException) //checks if input is int
         {
             Console.WriteLine("Invalid input. Enter valid ID.");
         }
@@ -685,12 +691,12 @@ void modifyOrder()
     customersDict[customerID].CurrentOrder.AddIceCream(orderList[1].IceCreamList[0]);
 
     Console.WriteLine("\nCurrent order: ");
-
     for (int i = 0; i < customersDict[customerID].CurrentOrder.IceCreamList.Count; i++)
     {
         Console.WriteLine($"{i+1}. {customersDict[customerID].CurrentOrder.IceCreamList[i]}");
     }
 
+    //prompt the user to either [1] choose an existing ice cream object to modify, [2] add an entirely new ice cream object to the order, or[3] choose an existing ice cream object to delete from the order
     Console.WriteLine("\n====Select an option: ====");
     Console.WriteLine("[1] Choose an existing ice cream to modify");
     Console.WriteLine("[2] Add a new ice cream to the order");
@@ -709,13 +715,13 @@ void modifyOrder()
                 {
                     iceCream = Convert.ToInt32(Console.ReadLine());
 
-                    if (iceCream > customersDict[customerID].CurrentOrder.IceCreamList.Count || iceCream == 0)
+                    if (iceCream > customersDict[customerID].CurrentOrder.IceCreamList.Count || iceCream == 0) //checks if ice cream exists in list
                     {
                         throw new ArgumentException("Ice cream does not exist. Enter valid input.");
                     }
                     break;
                 }
-                catch (FormatException)
+                catch (FormatException) //checks if input is int
                 {
                     Console.WriteLine("Invalid input. Enter valid ID.");
                 }
@@ -727,6 +733,7 @@ void modifyOrder()
 
             customersDict[customerID].CurrentOrder.ModifyIceCream(iceCream-1);
             break;
+
         case "2":
             List<Flavour> flavours = new List<Flavour>();
             List<Topping> toppings = new List<Topping>();
@@ -742,11 +749,11 @@ void modifyOrder()
                 Console.WriteLine("2. Waffle");
                 Console.WriteLine("3. Cone");
 
-                //prompt
+                //prompt for serving options
                 Console.Write("\nEnter new serving option: ");
                 type = Console.ReadLine().ToLower();
 
-                if (type == "cup" || type == "waffle" || type == "cone")
+                if (type == "cup" || type == "waffle" || type == "cone") //check if input is valid
                 {
                     break;
                 }
@@ -771,12 +778,14 @@ void modifyOrder()
 
                     if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan" || waffleFlavour == "original")
                     {
-                        break;
+                        break; //checks if input is valid
                     }
                     else { Console.WriteLine("Invalid waffle flavour. Please enter [red velvet/charcoal/pandan/original]. "); }
                 }
 
             }
+
+            //prompt (cone-dipped)
             else if (type == "cone")
             {
                 string dippedStf;
@@ -785,7 +794,7 @@ void modifyOrder()
                     Console.Write("\nWould your like your cone to be dipped? (Y/N): ");
                     dippedStf = Console.ReadLine().ToUpper();
 
-                    if (dippedStf != "Y" && dippedStf != "N")
+                    if (dippedStf != "Y" && dippedStf != "N") //checks if input is valid
                     {
                         Console.WriteLine("Invalid input. Please enter [Y/N]. ");
                     }
@@ -796,7 +805,7 @@ void modifyOrder()
                 }
                 if (dippedStf == "Y")
                 {
-                    dipped = true;
+                    dipped = true; 
                 }
             }
 
@@ -809,13 +818,13 @@ void modifyOrder()
                 {
                     scoops = Convert.ToInt32(Console.ReadLine());
 
-                    if (scoops < 1 || scoops > 3)
+                    if (scoops < 1 || scoops > 3) //check if scoops is between 1-3
                     {
                         throw new ArgumentException("Enter valid number of scoops [1-3]");
                     }
                     break;
                 }
-                catch (FormatException)
+                catch (FormatException) //check if input is int
                 {
                     Console.WriteLine("Invalid input. Please try again.");
                 }
@@ -825,7 +834,7 @@ void modifyOrder()
                 }
             }
 
-            for (int i = scoops; i > 0;)
+            for (int i = scoops; i > 0;) //when quota of ice cream scoops has not been met, for loops
             {
                 Console.WriteLine($"\n===Enter icecream flavour | remaining: {i} ==== ");
                 string flavourType;
@@ -846,35 +855,36 @@ void modifyOrder()
                     flavourType = Console.ReadLine().ToLower();
                     if (flavourType == "vanilla" || flavourType == "chocolate" || flavourType == "strawberry" || flavourType == "durian" || flavourType == "ube" || flavourType == "sea salt")
                     {
-                        break;
+                        break; //checks if flavour type is valid
                     }
                     else { Console.WriteLine("Invalid flavour input. Enter valid ice cream flavour. "); }
                 }
                 if (premiumList.Contains(flavourType))
                 {
-                    premium = true;
+                    premium = true; //checks if flavour is premium or normal
                 }
 
                 int flavourQuantity;
                 while (true)
                 {
-                    Console.Write("Enter flavour quantity: ");
+                    //prompts for number of scoops for chosen flavour
+                    Console.Write("Enter flavour quantity: "); 
                     try
                     {
                         flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                        if (flavourQuantity == 0 || flavourQuantity > i)
+                        if (flavourQuantity == 0 || flavourQuantity > i) //checks if input is between 1-i
                         {
                             Console.WriteLine("Invalid input. Please enter valid input. ");
                         }
                         else
                         {
-                            i -= flavourQuantity;
+                            i -= flavourQuantity; //if scoops quota is not met, loops 
                             break;
                         }
                         break;
                     }
-                    catch (FormatException)
+                    catch (FormatException) //check if input in int
                     {
                         Console.WriteLine("Invalid input. Please try again. ");
                     }
@@ -887,8 +897,10 @@ void modifyOrder()
                 flavours.Add(flavour);
             }
 
+            //prompt for toppings
             while (true)
             {
+                //display list of toppings
                 string toppingType;
                 Console.WriteLine("\n====Available toppings: ====");
                 Console.WriteLine("1. Sprinkles");
@@ -901,11 +913,11 @@ void modifyOrder()
 
                 if (toppingType == "nil")
                 {
-                    break;
+                    break; //check if user wants toppings
                 }
                 else if (toppingType == "nil" || toppingType == "sprinkles" || toppingType == "oreos" || toppingType == "sago" || toppingType == "mochi")
                 {
-                    Topping topping = new Topping(toppingType);
+                    Topping topping = new Topping(toppingType); //checks if topping is valid
                     toppings.Add(topping);
                 }
                 else
@@ -947,14 +959,36 @@ void modifyOrder()
                     }
                     break;
             }
-
             break;
 
         case "3":
             if (customersDict[customerID].CurrentOrder.IceCreamList.Count >= 1)
             {
-                Console.Write("Which ice cream: ");
-                customersDict[customerID].CurrentOrder.DeleteIceCream(Convert.ToInt32(Console.ReadLine()));
+                //prompt for ice cream to delete
+                int icecream;
+                while (true)
+                {
+                    Console.Write("Which ice cream: ");
+                    try
+                    {
+                        icecream = Convert.ToInt32(Console.ReadLine());
+
+                        if (icecream > customersDict[customerID].CurrentOrder.IceCreamList.Count || icecream == 0) //checks if ice cream exists in list
+                        {
+                            throw new ArgumentException("Ice cream does not exist. Enter valid input.");
+                        }
+                        break;
+                    }
+                    catch (FormatException) //checks if input is int
+                    {
+                        Console.WriteLine("Invalid input. Enter valid ID.");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                customersDict[customerID].CurrentOrder.DeleteIceCream(icecream);
 
                 Console.WriteLine("====Deleted ice cream====");
                 Console.WriteLine($"{customersDict[customerID].CurrentOrder}");
@@ -964,14 +998,12 @@ void modifyOrder()
                 Console.WriteLine("You cannot have zero ice creams in an order");
             }
             break;
-        
     }
 }
 
 // Process order and checkout
 void processOrder()
 {
-
     Order currentOrder = null;
 
     if (goldQueue.Count != 0)
