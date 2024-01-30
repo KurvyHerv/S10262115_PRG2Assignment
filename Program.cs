@@ -1048,7 +1048,7 @@ while (toggle)
             break;
         case "7":
             Console.WriteLine("\n========== [7] Process an order an checkout. ==========");
-           /* processOrder();*/
+            processOrder();
             break;
         case "0":
             Console.WriteLine("Bye!");
