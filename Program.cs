@@ -172,10 +172,17 @@ void ListAllCustomers(Dictionary<int, Customer> customersDict)
 //2 - List all Current Orders (Hervin)
 void ListAllOrders(Dictionary<int, Customer> customersDict)
 {
+    bool toggle = false;
     foreach (int customerId in customersDict.Keys)
     {
-        Console.WriteLine(customersDict[customerId].CurrentOrder);
+        if (customersDict[customerId].CurrentOrder != null)
+        {
+            Console.WriteLine(customersDict[customerId].CurrentOrder);
+            toggle = true;
+        }
     }
+    if (toggle == false) { Console.WriteLine("No current orders"); }
+    
 }
 
 //3 - Register a new Customer (Rena)
