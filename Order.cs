@@ -45,7 +45,7 @@ namespace S10262115_PRG2Assignment
                 Console.WriteLine("3. Cone");
 
                 //prompt
-                Console.Write("\nEnter serving option: ");
+                Console.Write("\nEnter new serving option: ");
                 option = Console.ReadLine().ToLower();
 
                 if (option == "cup" || option == "waffle" || option == "cone")
@@ -67,7 +67,7 @@ namespace S10262115_PRG2Assignment
                     Console.WriteLine("3. pandan");
 
                     //prompt
-                    Console.Write("\nEnter waffle flavour: ");
+                    Console.Write("\nEnter new waffle flavour: ");
                     waffleFlavour = Console.ReadLine().ToLower();
 
                     if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan")
@@ -105,7 +105,7 @@ namespace S10262115_PRG2Assignment
             int scoops;
             while (true)
             {
-                Console.Write("\nEnter number of ice cream scoops: ");
+                Console.Write("\nEnter new number of ice cream scoops: ");
                 scoops = Convert.ToInt32(Console.ReadLine());
 
                 if (scoops > 0 && scoops < 4)
@@ -117,7 +117,7 @@ namespace S10262115_PRG2Assignment
 
             for (int i = scoops; i > 0; i--)
             {
-                Console.WriteLine($"\n===Enter icecream flavour | remaining: {i} ==== ");
+                Console.WriteLine($"\n===Enter new icecream flavour | remaining: {i} ==== ");
                 string flavourType;
                 bool premium = false;
                 while (true)
@@ -132,7 +132,7 @@ namespace S10262115_PRG2Assignment
                     Console.WriteLine("2. Ube");
                     Console.WriteLine("3. Sea Salt");
 
-                    Console.Write("\nEnter ice cream flavour: ");
+                    Console.Write("\nEnter new ice cream flavour: ");
                     flavourType = Console.ReadLine();
                     if (flavourType == "vanilla" || flavourType == "chocolate" || flavourType == "strawberry" || flavourType == "durian" || flavourType == "ube" || flavourType == "sea salt")
                     {
@@ -148,7 +148,7 @@ namespace S10262115_PRG2Assignment
                 int flavourQuantity;
                 while (true)
                 {
-                    Console.Write("Enter flavour quantity: ");
+                    Console.Write("Enter new flavour quantity: ");
                     flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
                     if (flavourQuantity < scoops || flavourQuantity > scoops)
@@ -174,7 +174,7 @@ namespace S10262115_PRG2Assignment
                 Console.WriteLine("3. Sago");
                 Console.WriteLine("4. Mochi");
 
-                Console.Write("\nEnter toppings [nil for no toppings]: ");
+                Console.Write("\nEnter new toppings [nil for no toppings]: ");
                 toppingType = Console.ReadLine().ToLower();
 
                 if (toppingType == "nil")
@@ -196,15 +196,15 @@ namespace S10262115_PRG2Assignment
             {
                 case "waffle":
                     IceCreamList[index] = new Waffle(option, scoops, flavours, toppings, waffleFlavour);
-                    Console.WriteLine("Added Successfully");
+                    Console.WriteLine("Added new ice cream Successfully");
                     break;
                 case "cone":
                     IceCreamList[index] = new Cone(option, scoops, flavours, toppings, dipped);
-                    Console.WriteLine("Added Successfully");
+                    Console.WriteLine("Added new ice cream Successfully");
                     break;
                 case "cup":
                     IceCreamList[index] = new Cup(option, scoops, flavours, toppings);
-                    Console.WriteLine("Added Successfully");
+                    Console.WriteLine("Added new ice cream Successfully");
                     break;
             }
         }
