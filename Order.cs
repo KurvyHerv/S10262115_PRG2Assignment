@@ -30,7 +30,7 @@ namespace S10262115_PRG2Assignment
             List<Flavour> flavours = new List<Flavour>();
             List<Topping> toppings = new List<Topping>();
             string[] premiumList = { "Durian", "Ube", "Sea Salt" };
-            IceCream iceCream = IceCreamList[index];
+            IceCream iceCream = IceCreamList[index -1];
             string waffleFlavour = "";
             bool dipped = false;
 
@@ -197,14 +197,23 @@ namespace S10262115_PRG2Assignment
                 case "waffle":
                     IceCreamList[index] = new Waffle(option, scoops, flavours, toppings, waffleFlavour);
                     Console.WriteLine("Added new ice cream Successfully");
+
+                    Console.WriteLine("\n====Ice cream summary: ====");
+                    Console.WriteLine(IceCreamList[index]);
                     break;
                 case "cone":
                     IceCreamList[index] = new Cone(option, scoops, flavours, toppings, dipped);
                     Console.WriteLine("Added new ice cream Successfully");
+
+                    Console.WriteLine("\n====Ice cream summary: ====");
+                    Console.WriteLine(IceCreamList[index]);
                     break;
                 case "cup":
                     IceCreamList[index] = new Cup(option, scoops, flavours, toppings);
                     Console.WriteLine("Added new ice cream Successfully");
+
+                    Console.WriteLine("\n====Ice cream summary: ====");
+                    Console.WriteLine(IceCreamList[index]);
                     break;
             }
         }

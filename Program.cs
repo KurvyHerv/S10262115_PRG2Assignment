@@ -550,78 +550,99 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
 void CustomerOrder()
 {
     ListAllCustomers(customersDict);
-    try
+
+    //prompt user for customer id
+    int customerID;
+    while (true)
     {
-        int customerID;
-        while (true)
+        Console.Write("Enter customer ID: ");
+        try
         {
-            Console.Write("Enter customer ID: ");
-            try
-            {
-                customerID = Convert.ToInt32(Console.ReadLine());
+            customerID = Convert.ToInt32(Console.ReadLine());
 
-                if (!customersDict.ContainsKey(customerID))
-                {
-                    throw new ArgumentException("Customer ID does not exist. Enter valid ID.");
-                }
-                break;
-            }
-            catch (FormatException)
+            if (!customersDict.ContainsKey(customerID))
             {
-                Console.WriteLine("Invalid input. Enter valid ID.");
+                throw new ArgumentException("Customer ID does not exist. Enter valid ID.");
             }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            break;
         }
-
-        Console.WriteLine("====Current order: ====");
-        if (customersDict[customerID].CurrentOrder == null)
+        catch (FormatException)
         {
-            Console.WriteLine("No current orders");
+            Console.WriteLine("Invalid input. Enter valid ID.");
         }
-        else
+        catch (ArgumentException ex)
         {
-            Console.WriteLine(customersDict[customerID].CurrentOrder);
-        }
-
-        Console.WriteLine("\n====Past orders: ====");
-        if (customersDict[customerID].OrderHistory == null)
-        {
-            Console.WriteLine("No past order. ");
-        }
-        else
-        {
-            foreach (Order order in customersDict[customerID].OrderHistory)
-            {
-                Console.WriteLine($"\n{order}");
-            }
+            Console.WriteLine(ex.Message);
         }
     }
-    catch (Exception e)
+
+    Console.WriteLine("====Current order: ====");
+    if (customersDict[customerID].CurrentOrder == null)
     {
-        Console.WriteLine (e.Message);
+        Console.WriteLine("No current orders");
+    }
+    else
+    {
+        Console.WriteLine(customersDict[customerID].CurrentOrder);
+    }
+
+    Console.WriteLine("\n====Past orders: ====");
+    if (customersDict[customerID].OrderHistory == null)
+    {
+        Console.WriteLine("No past order. ");
+    }
+    else
+    {
+        foreach (Order order in customersDict[customerID].OrderHistory)
+        {
+            Console.WriteLine($"\n{order}");
+        }
     }
 }
 
 //6 - Modify order details (Hervin)
 void modifyOrder()
 {
+    Console.WriteLine("\n====Customer List: ====");
     ListAllCustomers(customersDict);
 
-    Console.Write("Input customer ID: ");
-    int customerID = Convert.ToInt32(Console.ReadLine());
+    //prompt user for customer id
+    int customerID;
+    while (true)
+    {
+        Console.Write("Select customer ID to view current order: ");
+        try
+        {
+            customerID = Convert.ToInt32(Console.ReadLine());
+
+            if (!customersDict.ContainsKey(customerID))
+            {
+                throw new ArgumentException("Customer ID does not exist. Enter valid ID.");
+            }
+            break;
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid input. Enter valid ID.");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 
     customersDict[customerID].CurrentOrder = new Order(9999999, orderList[0].TimeReceived);
     customersDict[customerID].CurrentOrder.AddIceCream(orderList[0].IceCreamList[0]);
     customersDict[customerID].CurrentOrder.AddIceCream(orderList[1].IceCreamList[0]);
-    Console.WriteLine("current order: ");
+
+    Console.WriteLine("\nCurrent order: ");
 
     for (int i = 0; i < customersDict[customerID].CurrentOrder.IceCreamList.Count; i++)
     {
         Console.WriteLine($"{i+1}. {customersDict[customerID].CurrentOrder.IceCreamList[i]}");
     }
+
+    Console.WriteLine("\n====Select an option: ====");
     Console.WriteLine("[1] Choose an existing ice cream to modify");
     Console.WriteLine("[2] Add a new ice cream to the order");
     Console.WriteLine("[3] Choose an existing ice cream to delete from the order");
@@ -633,7 +654,7 @@ void modifyOrder()
         case "1":
             Console.Write("Which ice cream: ");
             int iceCream = Convert.ToInt32(Console.ReadLine());
-            customersDict[customerID].CurrentOrder.ModifyIceCream(iceCream - 1);
+            customersDict[customerID].CurrentOrder.ModifyIceCream(iceCream);
             break;
         case "2":
             List<Flavour> flavours = new List<Flavour>();
@@ -803,16 +824,35 @@ void modifyOrder()
                 case "waffle":
                     customersDict[customerID].CurrentOrder.AddIceCream(new Waffle(type, scoops, flavours, toppings, waffleFlavour));
                     Console.WriteLine("Added new ice cream Successfully");
+
+                    Console.WriteLine("\n====Order summary: ====");
+                    for (int i = 0; i < customersDict[customerID].CurrentOrder.IceCreamList.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {customersDict[customerID].CurrentOrder.IceCreamList[i]}");
+                    }
                     break;
                 case "cone":
                     customersDict[customerID].CurrentOrder.AddIceCream(new Cone(type, scoops, flavours, toppings, dipped));
                     Console.WriteLine("Added new ice cream Successfully");
+
+                    Console.WriteLine("\n====Order summary: ====");
+                    for (int i = 0; i < customersDict[customerID].CurrentOrder.IceCreamList.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {customersDict[customerID].CurrentOrder.IceCreamList[i]}");
+                    }
                     break;
                 case "cup":
                     customersDict[customerID].CurrentOrder.AddIceCream(new Cup(option, scoops, flavours, toppings));
                     Console.WriteLine("Added new ice cream Successfully");
+
+                    Console.WriteLine("\n====Order summary: ====");
+                    for (int i = 0; i < customersDict[customerID].CurrentOrder.IceCreamList.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {customersDict[customerID].CurrentOrder.IceCreamList[i]}");
+                    }
                     break;
             }
+
             break;
 
         case "3":
@@ -820,6 +860,9 @@ void modifyOrder()
             {
                 Console.Write("Which ice cream: ");
                 customersDict[customerID].CurrentOrder.DeleteIceCream(Convert.ToInt32(Console.ReadLine()));
+
+                Console.WriteLine("====Deleted ice cream====");
+                Console.WriteLine($"{customersDict[customerID].CurrentOrder}");
             }
             else
             {
@@ -827,7 +870,6 @@ void modifyOrder()
             }
             break;
     }
-
 }
 
 /*// Process order and checkout
@@ -891,5 +933,4 @@ while (toggle)
             toggle = false;
             break;
     }
-
 }
