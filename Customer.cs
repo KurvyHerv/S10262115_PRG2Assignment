@@ -119,16 +119,27 @@ namespace S10262115_PRG2Assignment
             while (true)
             {
                 Console.Write("\nEnter number of ice cream scoops[1-3]: ");
-                scoops = Convert.ToInt32(Console.ReadLine());   
-
-                if (scoops > 0 && scoops < 4)
+                try
                 {
+                    scoops = Convert.ToInt32(Console.ReadLine());
+
+                    if (scoops < 1 || scoops > 3)
+                    {
+                        throw new ArgumentException("Enter valid number of scoops [1-3]");
+                    }
                     break;
                 }
-                else { Console.WriteLine("Enter valid number of scoops [1-3]"); }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid input. Please try again.");
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }          
 
-            for (int i = scoops; i > 0; i--)
+            for (int i = scoops; i > 0;)
             {
                 Console.WriteLine($"\n===Enter icecream flavour | remaining: {i} ==== ");
                 string flavourType;
@@ -161,16 +172,17 @@ namespace S10262115_PRG2Assignment
                 int flavourQuantity;
                 while (true)
                 {
+
                     Console.Write("Enter flavour quantity: ");
                     flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                    if (flavourQuantity < scoops || flavourQuantity > scoops)
+                    if (flavourQuantity == 0 || flavourQuantity > i)
                     {
                         Console.WriteLine("Invalid input. Please enter valid input. ");
                     }
                     else
                     {
-                        i = scoops - i;
+                        i -= flavourQuantity;
                         break;
                     }
                 }

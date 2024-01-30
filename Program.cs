@@ -349,14 +349,18 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
 
     //prompt user if customer wants another ice cream
     string add;
-    do
+    while (true)
     {
         Console.Write("Do you want to add another ice cream[Y/N]: ");
         add = Console.ReadLine().ToUpper();
-    }
-    while (add != "Y" && add != "N");
 
-    while (add == "Y")
+        if (add != "Y" && add != "N")
+        {
+            Console.WriteLine("Invalid input. Please enter Y/N.");
+        }
+        else { break; }
+    }
+    if (add  == "Y")
     {
         List<Flavour> flavours1 = new List<Flavour>();
         List<Topping> toppings1 = new List<Topping>();
@@ -435,17 +439,28 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
         int scoops;
         while (true)
         {
-            Console.Write("\nEnter number of ice cream scoops: ");
-            scoops = Convert.ToInt32(Console.ReadLine());
-
-            if (scoops > 0 && scoops < 4)
+            Console.Write("\nEnter number of ice cream scoops[1-3]: ");
+            try
             {
+                scoops = Convert.ToInt32(Console.ReadLine());
+
+                if (scoops < 1 || scoops > 3)
+                {
+                    throw new ArgumentException("Enter valid number of scoops [1-3]");
+                }
                 break;
             }
-            else { Console.WriteLine("Invalid input. Please enter valid number of scoops [1-3]"); }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
-        for (int i = scoops; i > 0; i--)
+        for (int i = scoops; i > 0;)
         {
             Console.WriteLine($"\n===Enter icecream flavour | remaining: {i} ==== ");
             string flavourType;
@@ -487,7 +502,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 }
                 else
                 {
-                    i = scoops - i;
+                    i -= flavourQuantity;
                     break;
                 }
             }
@@ -534,11 +549,8 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 customersDict[customerID].CurrentOrder.AddIceCream(new Cup(option, scoops, flavours, toppings));
                 break;
         }
+    }       
 
-        Console.Write("Do you want to add another ice cream[Y/N]: ");
-        add = Console.ReadLine().ToUpper();
-    }
-    
 
     if (customer.Rewards.Tier == "Gold")
     {
@@ -741,17 +753,28 @@ void modifyOrder()
             int scoops;
             while (true)
             {
-                Console.Write("\nEnter new number of ice cream scoops: ");
-                scoops = Convert.ToInt32(Console.ReadLine());
-
-                if (scoops > 0 && scoops < 4)
+                Console.Write("\nEnter number of ice cream scoops[1-3]: ");
+                try
                 {
+                    scoops = Convert.ToInt32(Console.ReadLine());
+
+                    if (scoops < 1 || scoops > 3)
+                    {
+                        throw new ArgumentException("Enter valid number of scoops [1-3]");
+                    }
                     break;
                 }
-                else { Console.WriteLine("Enter valid number of scoops [1-3]"); }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid input. Please try again.");
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
-            for (int i = scoops; i > 0; i--)
+            for (int i = scoops; i > 0;)
             {
                 Console.WriteLine($"\n===Enter icecream flavour | remaining: {i} ==== ");
                 string flavourType;
@@ -793,7 +816,7 @@ void modifyOrder()
                     }
                     else
                     {
-                        i = scoops - i;
+                        i -= flavourQuantity;
                         break;
                     }
                 }
