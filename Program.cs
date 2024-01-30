@@ -921,27 +921,98 @@ void modifyOrder()
     }
 }
 
-/*// Process order and checkout
+// Process order and checkout
 void processOrder()
 {
-    if (goldQueue.Count! > 0)
+
+    Order currentOrder = null;
+
+    if (goldQueue.Count != 0)
     {
-        Order currentOrder = orderQueue.Dequeue();
-        if (currentOrder != null)
-        {
-            for (int i = 0; i < currentOrder.IceCreamList.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {currentOrder.IceCreamList[i]}");
-            }
-            Console.WriteLine($"Total price: {currentOrder.CalculateTotal()}");
-            Console.WriteLine($"Membership status: {customersDict[orderDict[currentOrder]].Rewards.Tier}");
-        }
+        currentOrder = goldQueue.Dequeue();
+    }
+    else if (orderQueue.Count != 0)
+    {
+        currentOrder = orderQueue.Dequeue();
     }
     else
     {
-        Console.WriteLine("Gold queue exist");
+        Console.WriteLine("No current orders");
     }
-}*/
+
+
+    if (currentOrder != null)
+    {
+        for (int i = 0; i < currentOrder.IceCreamList.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {currentOrder.IceCreamList[i]}");
+        }
+        Customer customer = customersDict[currentOrderDict[currentOrder.Id]];
+        double totalPrice = currentOrder.CalculateTotal();
+        Console.WriteLine($"Total price: ${totalPrice}");
+        Console.WriteLine($"Membership status: {customer.Rewards.Tier}");
+        Console.WriteLine($"Available Points: {customer.Rewards.Points}");
+        if (customer.IsBirthday())
+        {
+            double mostExpensive = 0;
+            Console.WriteLine("It's your birthday!");
+
+            for (int i = 0; i < currentOrder.IceCreamList.Count; i++)
+            {
+                if (currentOrder.IceCreamList[i].CalculatePrice() > mostExpensive)
+                {
+                    mostExpensive = currentOrder.IceCreamList[i].CalculatePrice();
+                }
+            }
+            totalPrice -= mostExpensive;
+        }
+        if (customer.Rewards.PunchCard == 10)
+        {
+            totalPrice -= currentOrder.IceCreamList[0].CalculatePrice();
+            customer.Rewards.PunchCard = 0;
+            Console.WriteLine("Punch Card Redeemed");
+        }
+        else
+        {
+            if (customer.Rewards.Tier == "Silver" || customer.Rewards.Tier == "Gold")
+            {
+                Console.Write($"You have {customer.Rewards.Points} points. How much would you like to redeem? (nil for none)");
+                int points = Convert.ToInt32(Console.ReadLine());
+                if ((totalPrice - points * 0.04) < 0)
+                {
+                    points -= Convert.ToInt32(Math.Floor(totalPrice * 25));
+                    totalPrice = 0;
+                }
+                else if ((totalPrice - points * 0.04) > 0)
+                {
+                    customer.Rewards.RedeemPoints(points);
+                    totalPrice -= points * 0.04;
+                }
+            }
+        }
+
+        Console.WriteLine($"Final bill amount: {totalPrice}");
+        Console.WriteLine("Press any key to make payment");
+        Console.ReadLine();
+        customer.Rewards.PunchCard += currentOrder.IceCreamList.Count;
+        if (customer.Rewards.PunchCard > 10)
+        {
+            customer.Rewards.PunchCard = 10;
+        }
+        customer.Rewards.AddPoints(Convert.ToInt32(Math.Floor(totalPrice * 0.72)));
+        if (customer.Rewards.Points >= 50 && customer.Rewards.Points < 100)
+        {
+            customer.Rewards.Tier = "Silver";
+        }
+        else if (customer.Rewards.Points >= 100)
+        {
+            customer.Rewards.Tier = "Gold";
+        }
+        currentOrder.TimeFullfilled = DateTime.Now;
+        customer.OrderHistory.Add(currentOrder);
+        customer.CurrentOrder = null;
+    }
+}
 
 
 //Initialise methods
