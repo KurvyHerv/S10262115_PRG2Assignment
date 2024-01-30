@@ -1023,6 +1023,7 @@ void processOrder()
     //if there is available current order
     if (currentOrder != null)
     {
+        Console.WriteLine("\n====Order details====");
         for (int i = 0; i < currentOrder.IceCreamList.Count; i++)
         {
             Console.WriteLine($"{i + 1}. {currentOrder.IceCreamList[i]}");
@@ -1115,11 +1116,12 @@ void processOrder()
         //display final bill
         Console.WriteLine("\n====Final bill====");
         Console.WriteLine($"Final bill amount: ${totalPrice:0.00}");
-        Console.WriteLine("Press any key to make payment");
+        Console.Write("Press any key to make payment");
         Console.ReadLine();
 
         //increment punch card for every ice cream in order
         customer.Rewards.PunchCard += currentOrder.IceCreamList.Count;
+        Console.WriteLine("\n====Member rewards claim====");
         Console.WriteLine("10 points added to PunchCard");
         if (customer.Rewards.PunchCard > 10) //if goes above 10, goes back to 10
         {
