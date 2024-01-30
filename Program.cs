@@ -841,6 +841,7 @@ void modifyOrder()
                 bool premium = false;
                 while (true)
                 {
+                    //display available flavours
                     Console.WriteLine("\n====Available flavours: ====");
                     Console.WriteLine("\nNormal flavours: ");
                     Console.WriteLine("1. Vanilla");
@@ -1008,74 +1009,84 @@ void processOrder()
 
     if (goldQueue.Count != 0)
     {
-        currentOrder = goldQueue.Dequeue();
+        currentOrder = goldQueue.Dequeue(); //dequeue first order in gold queue
     }
     else if (orderQueue.Count != 0)
     {
-        currentOrder = orderQueue.Dequeue();
+        currentOrder = orderQueue.Dequeue(); //dequeue first order in normal queue
     }
     else
     {
-        Console.WriteLine("No current orders");
+        Console.WriteLine("No current orders"); //checks if there is any current order
     }
 
-
+    //if there is available current order
     if (currentOrder != null)
     {
         for (int i = 0; i < currentOrder.IceCreamList.Count; i++)
         {
             Console.WriteLine($"{i + 1}. {currentOrder.IceCreamList[i]}");
         }
-        Customer customer = customersDict[currentOrderDict[currentOrder.Id]];
-        double totalPrice = currentOrder.CalculateTotal();
+        Customer customer = customersDict[currentOrderDict[currentOrder.Id]]; //retrieve order of chosen customer
+        double totalPrice = currentOrder.CalculateTotal(); //calculate total order of customer
 
+        //display total
         Console.WriteLine("\n====Checkout====");
         Console.WriteLine($"Total price: ${totalPrice:0.00}");
 
+        //display membership status and points
         Console.WriteLine("\n====Display membership status and points====");
         Console.WriteLine($"Membership status: {customer.Rewards.Tier}");
         Console.WriteLine($"Available Points: {customer.Rewards.Points}");
+
+        //checks for customer birthday
         if (customer.IsBirthday())
         {
             double mostExpensive = 0;
             Console.WriteLine("\n====Birthday Special!====");
-            Console.WriteLine("It's your birthday!");
+            Console.WriteLine("It's your birthday! Special discount available");
 
             for (int i = 0; i < currentOrder.IceCreamList.Count; i++)
             {
-                if (currentOrder.IceCreamList[i].CalculatePrice() > mostExpensive)
+                if (currentOrder.IceCreamList[i].CalculatePrice() > mostExpensive) //if customer birthday, most expensive order = 0
                 {
                     mostExpensive = currentOrder.IceCreamList[i].CalculatePrice();
                 }
             }
-            totalPrice -= mostExpensive;
+            totalPrice -= mostExpensive; //recalculate total
+            Console.WriteLine($"\nNew total: ${totalPrice:0.00}"); //display new total
         }
-        if (customer.Rewards.PunchCard == 10)
+
+        if (customer.Rewards.PunchCard == 10) //check if customer has completed the punch card
         {
-            totalPrice -= currentOrder.IceCreamList[0].CalculatePrice();
-            customer.Rewards.PunchCard = 0;
+            totalPrice -= currentOrder.IceCreamList[0].CalculatePrice(); //first order is removed from total
+            customer.Rewards.PunchCard = 0; //reset punch card
+
+            Console.WriteLine("\n====Punch card completed! ====");
             Console.WriteLine("\nPunch Card Redeemed");
         }
-        else
+        else //continues
         {
-            if (customer.Rewards.Tier == "Silver" || customer.Rewards.Tier == "Gold")
+            if (customer.Rewards.Tier == "Silver" || customer.Rewards.Tier == "Gold") //checks if customer is silver or gold for more benefits
             {
+                Console.WriteLine($"\n===={customer.Rewards.Tier} benefits====");
+
+                //prompt user if customer wants to redeem points
                 int points;
                 while (true)
                 {
-                    Console.Write($"\nYou have {customer.Rewards.Points} points. How much would you like to redeem?: ");
-
+                    Console.Write($"You have {customer.Rewards.Points} points. How much would you like to redeem?: ");
                     try
                     {
                         points = Convert.ToInt32(Console.ReadLine());
 
-                        if (points > customer.Rewards.Points)
+                        if (points > customer.Rewards.Points) //checks if points requested to be redeemed exceeds points available
                         {
-                            throw new ArgumentException("input exceeded available points. Please enter valid input. ");
+                            throw new ArgumentException("Input exceeded available points. Please enter valid input. ");
                         }
                         break;
                     }
-                    catch(FormatException)
+                    catch(FormatException) //checks if input is int
                     {
                         Console.WriteLine("Invalid input. Please try again.");
                     }
@@ -1084,48 +1095,53 @@ void processOrder()
                         Console.WriteLine($"{ex.Message}");
                     }
                 }
+                Console.WriteLine($"{points} redeemed");
 
-                if ((totalPrice - points * 0.04) < 0)
+                if ((totalPrice - points * 0.04) <= 0) //checks if points redeem covers total price
                 {
-                    points -= Convert.ToInt32(Math.Floor(totalPrice * 25));
+                    points -= Convert.ToInt32(Math.Floor(totalPrice * 25)); //deducts points redeemed
                     totalPrice = 0;
+     
+                    Console.WriteLine($"{points} remaaining. "); //display points remaining
                 }
-                else if ((totalPrice - points * 0.04) > 0)
+                else if ((totalPrice - points * 0.04) > 0) //if points does not cover total price
                 {
-                    customer.Rewards.RedeemPoints(points);
-                    totalPrice -= points * 0.04;
+                    customer.Rewards.RedeemPoints(points); 
+                    totalPrice -= points * 0.04; //total price recalculated
                 }
             }
         }
 
+        //display final bill
         Console.WriteLine("\n====Final bill====");
         Console.WriteLine($"Final bill amount: ${totalPrice:0.00}");
         Console.WriteLine("Press any key to make payment");
         Console.ReadLine();
 
+        //increment punch card for every ice cream in order
         customer.Rewards.PunchCard += currentOrder.IceCreamList.Count;
         Console.WriteLine("10 points added to PunchCard");
-        if (customer.Rewards.PunchCard > 10)
+        if (customer.Rewards.PunchCard > 10) //if goes above 10, goes back to 10
         {
             customer.Rewards.PunchCard = 10;
         }
-        customer.Rewards.AddPoints(Convert.ToInt32(Math.Floor(totalPrice * 0.72)));
-        if (customer.Rewards.Points >= 50 && customer.Rewards.Points < 100)
+
+        customer.Rewards.AddPoints(Convert.ToInt32(Math.Floor(totalPrice * 0.72))); //adds points
+        if (customer.Rewards.Points >= 50 && customer.Rewards.Points < 100) //upgrade member points accordingly
         {
             customer.Rewards.Tier = "Silver";
-            Console.WriteLine("Member upgraded to silver. ");
+            Console.WriteLine("Member upgraded to silver. "); //upgrade to silver
         }
         else if (customer.Rewards.Points >= 100)
         {
             customer.Rewards.Tier = "Gold";
-            Console.WriteLine("Member upgraded to gold. ");
+            Console.WriteLine("Member upgraded to gold. ");//upgrade to gold
         }
-        currentOrder.TimeFullfilled = DateTime.Now;
-        customer.OrderHistory.Add(currentOrder);
+        currentOrder.TimeFullfilled = DateTime.Now; //create time fullfilled
+        customer.OrderHistory.Add(currentOrder); //add to order history
         customer.CurrentOrder = null;
     }
 }
-
 
 //Initialise methods
 while (toggle)

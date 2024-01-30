@@ -56,11 +56,11 @@ namespace S10262115_PRG2Assignment
                 Console.WriteLine("2. Waffle");
                 Console.WriteLine("3. Cone");
 
-                //prompt
+                //prompt for serving option
                 Console.Write("\nEnter serving option: ");
                 option = Console.ReadLine().ToLower();
 
-                if (option == "cup" || option == "waffle" || option == "cone")
+                if (option == "cup" || option == "waffle" || option == "cone") //check for valid input
                 {
                     break;
                 }
@@ -85,7 +85,7 @@ namespace S10262115_PRG2Assignment
 
                     if (waffleFlavour == "red velvet" ||  waffleFlavour == "charcoal" || waffleFlavour == "pandan" || waffleFlavour == "original")
                     {
-                        break;
+                        break; //check for valid input
                     }
                     else { Console.WriteLine("Invalid waffle flavour. Please enter [red velvet/charcoal/pandan/original]. "); }
                 }
@@ -99,7 +99,7 @@ namespace S10262115_PRG2Assignment
                     Console.Write("\nWould your like your cone to be dipped? (Y/N): ");
                     dippedStf = Console.ReadLine().ToUpper();
 
-                    if (dippedStf != "Y" && dippedStf != "N")
+                    if (dippedStf != "Y" && dippedStf != "N") //check for valid input Y/N
                     {
                         Console.WriteLine("Invalid input. Please enter [Y/N]. ");
                     }
@@ -110,7 +110,7 @@ namespace S10262115_PRG2Assignment
                 }
                 if (dippedStf == "Y")
                 {
-                    dipped = true;
+                    dipped = true; //bool dipped is set to true
                 }
             }
 
@@ -123,13 +123,13 @@ namespace S10262115_PRG2Assignment
                 {
                     scoops = Convert.ToInt32(Console.ReadLine());
 
-                    if (scoops < 1 || scoops > 3)
+                    if (scoops < 1 || scoops > 3) //checks is scoops is between 1 and 3
                     {
                         throw new ArgumentException("Enter valid number of scoops [1-3]");
                     }
                     break;
                 }
-                catch (FormatException)
+                catch (FormatException) //check if input is int format
                 {
                     Console.WriteLine("Invalid input. Please try again.");
                 }
@@ -139,6 +139,7 @@ namespace S10262115_PRG2Assignment
                 }
             }          
 
+            //check if scoops quota is met
             for (int i = scoops; i > 0;)
             {
                 Console.WriteLine($"\n===Enter icecream flavour | remaining: {i} ==== ");
@@ -160,15 +161,16 @@ namespace S10262115_PRG2Assignment
                     flavourType = Console.ReadLine().ToLower();
                     if (flavourType == "vanilla" || flavourType == "chocolate" || flavourType == "strawberry" || flavourType == "durian" || flavourType == "ube" || flavourType == "sea salt")
                     {
-                        break;
+                        break; //check if input is valid
                     }
                     else { Console.WriteLine("Invalid input. Enter valid ice cream flavour. "); }
                 }
-                if (premiumList.Contains(flavourType))
-                    {
-                        premium = true;
+                if (premiumList.Contains(flavourType)) //check if flavour is premium
+                {
+                        premium = true; 
                     }
 
+                //prompt for flavour quantity
                 int flavourQuantity;
                 while (true)
                 {
@@ -177,18 +179,18 @@ namespace S10262115_PRG2Assignment
                     {
                         flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                        if (flavourQuantity == 0 || flavourQuantity > i)
+                        if (flavourQuantity == 0 || flavourQuantity > i) //check if flavourquantity is between 1-scoops
                         {
                             Console.WriteLine("Invalid input. Please enter valid input. ");
                         }
                         else
                         {
-                            i -= flavourQuantity;
+                            i -= flavourQuantity; //loops if scoop quota not met
                             break;
                         }
                         break;
                     }
-                    catch (FormatException)
+                    catch (FormatException) //checks if input is int format
                     {
                         Console.WriteLine("Invalid input. Please try again. ");
                     }
@@ -201,9 +203,12 @@ namespace S10262115_PRG2Assignment
                 flavours.Add(flavour);
             }
 
+            //prompt for toppings
             while (true)
             {
                 string toppingType;
+
+                //display topping list
                 Console.WriteLine("\n====Available toppings: ====");
                 Console.WriteLine("1. Sprinkles");
                 Console.WriteLine("2. Oreos");
@@ -213,11 +218,11 @@ namespace S10262115_PRG2Assignment
                 Console.Write("\nEnter toppings [nil for no toppings]: ");
                 toppingType = Console.ReadLine().ToLower();
 
-                if (toppingType == "nil")
+                if (toppingType == "nil") //check if customer wants topping 
                 {
                     break;
                 }
-                else if (toppingType == "nil" || toppingType == "sprinkles" || toppingType == "oreos" || toppingType == "sago" || toppingType == "mochi")
+                else if (toppingType == "nil" || toppingType == "sprinkles" || toppingType == "oreos" || toppingType == "sago" || toppingType == "mochi") //checks if topping is valid
                 {
                     Topping topping = new Topping(toppingType);
                     toppings.Add(topping);

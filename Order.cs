@@ -34,7 +34,7 @@ namespace S10262115_PRG2Assignment
             string waffleFlavour = "";
             bool dipped = false;
 
-
+            //prompt for options
             string option;
             while (true)
             {
@@ -48,7 +48,7 @@ namespace S10262115_PRG2Assignment
                 Console.Write("\nEnter new serving option: ");
                 option = Console.ReadLine().ToLower();
 
-                if (option == "cup" || option == "waffle" || option == "cone")
+                if (option == "cup" || option == "waffle" || option == "cone") //check if option is valid
                 {
                     break;
                 }
@@ -71,7 +71,7 @@ namespace S10262115_PRG2Assignment
                     Console.Write("\nEnter new waffle flavour: ");
                     waffleFlavour = Console.ReadLine().ToLower();
 
-                    if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan" || waffleFlavour == "original")
+                    if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan" || waffleFlavour == "original") //check if waffle flavour is valid
                     {
                         break;
                     }
@@ -79,6 +79,8 @@ namespace S10262115_PRG2Assignment
                 }
 
             }
+
+            //prompt for (cone-dipped)
             else if (option == "cone")
             {
                 string dippedStf;
@@ -87,7 +89,7 @@ namespace S10262115_PRG2Assignment
                     Console.Write("\nWould your like your cone to be dipped? (Y/N): ");
                     dippedStf = Console.ReadLine().ToUpper();
 
-                    if (dippedStf != "Y" && dippedStf != "N")
+                    if (dippedStf != "Y" && dippedStf != "N") //checks if input is valid
                     {
                         Console.WriteLine("Invalid input. Please enter [Y/N]. ");
                     }
@@ -98,7 +100,7 @@ namespace S10262115_PRG2Assignment
                 }
                 if (dippedStf == "Y")
                 {
-                    dipped = true;
+                    dipped = true; //sets bool dipped to true
                 }
             }
 
@@ -111,13 +113,13 @@ namespace S10262115_PRG2Assignment
                 {
                     scoops = Convert.ToInt32(Console.ReadLine());
 
-                    if (scoops < 1 || scoops > 3)
+                    if (scoops < 1 || scoops > 3) //checks if scoops is between 1-3
                     {
                         throw new ArgumentException("Enter valid number of scoops [1-3]");
                     }
                     break;
                 }
-                catch (FormatException)
+                catch (FormatException) //check is input int format is valid
                 {
                     Console.WriteLine("Invalid input. Please try again.");
                 }
@@ -127,6 +129,7 @@ namespace S10262115_PRG2Assignment
                 }
             }
 
+            //loops if scoop quota is not met
             for (int i = scoops; i > 0;)
             {
                 Console.WriteLine($"\n===Enter new icecream flavour | remaining: {i} ==== ");
@@ -134,6 +137,7 @@ namespace S10262115_PRG2Assignment
                 bool premium = false;
                 while (true)
                 {
+                    //display flavour quantity
                     Console.WriteLine("\n====Available flavours: ====");
                     Console.WriteLine("\nNormal flavours: ");
                     Console.WriteLine("1. Vanilla");
@@ -148,16 +152,16 @@ namespace S10262115_PRG2Assignment
                     flavourType = Console.ReadLine();
                     if (flavourType == "vanilla" || flavourType == "chocolate" || flavourType == "strawberry" || flavourType == "durian" || flavourType == "ube" || flavourType == "sea salt")
                     {
-                        break;
+                        break; //checks if flavour is valid
                     }
                     else { Console.WriteLine("Enter valid ice cream flavour. "); }
                 }
-                if (premiumList.Contains(flavourType))
+                if (premiumList.Contains(flavourType)) //checks if flavourtype is premium
                 {
-                    premium = true;
+                    premium = true; //sets bool premium to true 
                 }
 
-
+                //prompt for flavour quantity
                 int flavourQuantity;
                 while (true)
                 {
@@ -166,18 +170,18 @@ namespace S10262115_PRG2Assignment
                     {
                         flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                        if (flavourQuantity == 0 || flavourQuantity > i)
+                        if (flavourQuantity == 0 || flavourQuantity > i) //check if flavour is between 1-scoops
                         {
                             Console.WriteLine("Invalid input. Please enter valid input. ");
                         }
                         else
                         {
-                            i -= flavourQuantity;
+                            i -= flavourQuantity; //loops if quota is not met
                             break;
                         }
                         break;
                     }
-                    catch (FormatException)
+                    catch (FormatException) //checks if input in int format
                     {
                         Console.WriteLine("Invalid input. Please try again. ");
                     }
@@ -190,8 +194,10 @@ namespace S10262115_PRG2Assignment
                 flavours.Add(flavour);
             }
 
+            //prompt for topping
             while (true)
             {
+                //display topping list
                 string toppingType;
                 Console.WriteLine("\n====Available toppings: ====");
                 Console.WriteLine("1. Sprinkles");
@@ -206,7 +212,7 @@ namespace S10262115_PRG2Assignment
                 {
                     break;
                 }
-                else if (toppingType == "nil" || toppingType == "sprinkles" || toppingType == "oreos" || toppingType == "sago" || toppingType == "mochi")
+                else if (toppingType == "nil" || toppingType == "sprinkles" || toppingType == "oreos" || toppingType == "sago" || toppingType == "mochi") //checks if input is valid
                 {
                     Topping topping = new Topping(toppingType);
                     toppings.Add(topping);
