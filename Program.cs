@@ -654,7 +654,7 @@ void modifyOrder()
         case "1":
             Console.Write("Which ice cream: ");
             int iceCream = Convert.ToInt32(Console.ReadLine());
-            customersDict[customerID].CurrentOrder.ModifyIceCream(iceCream);
+            customersDict[customerID].CurrentOrder.ModifyIceCream(iceCream-1);
             break;
         case "2":
             List<Flavour> flavours = new List<Flavour>();

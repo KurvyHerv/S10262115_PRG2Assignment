@@ -30,7 +30,7 @@ namespace S10262115_PRG2Assignment
             List<Flavour> flavours = new List<Flavour>();
             List<Topping> toppings = new List<Topping>();
             string[] premiumList = { "Durian", "Ube", "Sea Salt" };
-            IceCream iceCream = IceCreamList[index -1];
+            IceCream iceCream = IceCreamList[index];
             string waffleFlavour = "";
             bool dipped = false;
 
