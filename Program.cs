@@ -688,8 +688,30 @@ void modifyOrder()
     switch (option)
     {
         case "1":
-            Console.Write("Which ice cream: ");
-            int iceCream = Convert.ToInt32(Console.ReadLine());
+            int iceCream;
+            while (true)
+            {
+                Console.Write("Which ice cream: ");
+                try
+                {
+                    iceCream = Convert.ToInt32(Console.ReadLine());
+
+                    if (iceCream > customersDict[customerID].CurrentOrder.IceCreamList.Count || iceCream == 0)
+                    {
+                        throw new ArgumentException("Ice cream does not exist. Enter valid input.");
+                    }
+                    break;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid input. Enter valid ID.");
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
             customersDict[customerID].CurrentOrder.ModifyIceCream(iceCream-1);
             break;
         case "2":
