@@ -77,16 +77,17 @@ namespace S10262115_PRG2Assignment
                     Console.WriteLine("1. red velvet");
                     Console.WriteLine("2. charcoal ");
                     Console.WriteLine("3. pandan");
+                    Console.WriteLine("4. orginal");
 
                     //prompt
                     Console.Write("\nEnter waffle flavour: ");
                     waffleFlavour = Console.ReadLine().ToLower();
 
-                    if (waffleFlavour == "red velvet" ||  waffleFlavour == "charcoal" || waffleFlavour == "pandan")
+                    if (waffleFlavour == "red velvet" ||  waffleFlavour == "charcoal" || waffleFlavour == "pandan" || waffleFlavour == "original")
                     {
                         break;
                     }
-                    else { Console.WriteLine("Invalid waffle flavour. Please enter [red velvet/charcoal/pandan]. "); }
+                    else { Console.WriteLine("Invalid waffle flavour. Please enter [red velvet/charcoal/pandan/original]. "); }
                 }
                 
             }
@@ -145,7 +146,7 @@ namespace S10262115_PRG2Assignment
                     Console.WriteLine("3. Sea Salt");
 
                     Console.Write("\nEnter ice cream flavour: ");
-                    flavourType = Console.ReadLine();
+                    flavourType = Console.ReadLine().ToLower();
                     if (flavourType == "vanilla" || flavourType == "chocolate" || flavourType == "strawberry" || flavourType == "durian" || flavourType == "ube" || flavourType == "sea salt")
                     {
                         break;

@@ -354,7 +354,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
         Console.Write("Do you want to add another ice cream[Y/N]: ");
         add = Console.ReadLine().ToUpper();
     }
-    while (add != "Y" &&  add != "N");
+    while (add != "Y" && add != "N");
 
     while (add == "Y")
     {
@@ -391,15 +391,16 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
             {
                 //show list of available waffle flavours
                 Console.WriteLine("\n====Available waffle flavour: ====");
-                Console.WriteLine("1. red velvet");
-                Console.WriteLine("2. charcoal ");
-                Console.WriteLine("3. pandan");
+                Console.WriteLine("1. Red velvet");
+                Console.WriteLine("2. Charcoal ");
+                Console.WriteLine("3. Pandan");
+                Console.WriteLine("4. Original");
 
                 //prompt
                 Console.Write("\nEnter waffle flavour: ");
                 waffleFlavour = Console.ReadLine().ToLower();
 
-                if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan")
+                if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan" || waffleFlavour == "original")
                 {
                     break;
                 }
@@ -441,7 +442,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
             {
                 break;
             }
-            else { Console.WriteLine("Enter valid number of scoops [1-3]"); }
+            else { Console.WriteLine("Invalid input. Please enter valid number of scoops [1-3]"); }
         }
 
         for (int i = scoops; i > 0; i--)
@@ -467,7 +468,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 {
                     break;
                 }
-                else { Console.WriteLine("Enter valid ice cream flavour. "); }
+                else { Console.WriteLine("Invalid input. Please enter valid ice cream flavour. "); }
             }
             if (premiumList.Contains(flavourType))
             {
@@ -699,16 +700,17 @@ void modifyOrder()
                     Console.WriteLine("1. red velvet");
                     Console.WriteLine("2. charcoal ");
                     Console.WriteLine("3. pandan");
+                    Console.WriteLine("4. original");
 
                     //prompt
                     Console.Write("\nEnter new waffle flavour: ");
                     waffleFlavour = Console.ReadLine().ToLower();
 
-                    if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan")
+                    if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan" || waffleFlavour == "original")
                     {
                         break;
                     }
-                    else { Console.WriteLine("Invalid waffle flavour. Please enter [red velvet/charcoal/pandan]. "); }
+                    else { Console.WriteLine("Invalid waffle flavour. Please enter [red velvet/charcoal/pandan/original]. "); }
                 }
 
             }
@@ -767,12 +769,12 @@ void modifyOrder()
                     Console.WriteLine("3. Sea Salt");
 
                     Console.Write("\nEnter ice cream flavour: ");
-                    flavourType = Console.ReadLine();
+                    flavourType = Console.ReadLine().ToLower();
                     if (flavourType == "vanilla" || flavourType == "chocolate" || flavourType == "strawberry" || flavourType == "durian" || flavourType == "ube" || flavourType == "sea salt")
                     {
                         break;
                     }
-                    else { Console.WriteLine("Enter valid ice cream flavour. "); }
+                    else { Console.WriteLine("Invalid flavour input. Enter valid ice cream flavour. "); }
                 }
                 if (premiumList.Contains(flavourType))
                 {
@@ -930,14 +932,19 @@ while (toggle)
             CustomerOrder();
             break;
         case "6":
+            Console.WriteLine("\n========== [6] Modify order details. ==========");
             modifyOrder();
             break;
         case "7":
+            Console.WriteLine("\n========== [7] Process an order an checkout. ==========");
            /* processOrder();*/
             break;
         case "0":
             Console.WriteLine("Bye!");
             toggle = false;
+            break;
+        default:
+            Console.WriteLine("Invalid input. Please try again.");
             break;
     }
 }
