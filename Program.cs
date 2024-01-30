@@ -509,7 +509,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                     Console.Write("Enter flavour quantity: ");
                     flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                    if (flavourQuantity == i || flavourQuantity > i)
+                    if (flavourQuantity == 0 || flavourQuantity > i)
                     {
                         Console.WriteLine("Invalid input. Please enter valid input. ");
                     }
@@ -971,12 +971,17 @@ void processOrder()
         }
         Customer customer = customersDict[currentOrderDict[currentOrder.Id]];
         double totalPrice = currentOrder.CalculateTotal();
-        Console.WriteLine($"Total price: ${totalPrice}");
+
+        Console.WriteLine("\n====Checkout====");
+        Console.WriteLine($"Total price: ${totalPrice:0.00}");
+
+        Console.WriteLine("\n====Display membership status and points====");
         Console.WriteLine($"Membership status: {customer.Rewards.Tier}");
         Console.WriteLine($"Available Points: {customer.Rewards.Points}");
         if (customer.IsBirthday())
         {
             double mostExpensive = 0;
+            Console.WriteLine("\n====Birthday Special!====");
             Console.WriteLine("It's your birthday!");
 
             for (int i = 0; i < currentOrder.IceCreamList.Count; i++)
@@ -992,14 +997,37 @@ void processOrder()
         {
             totalPrice -= currentOrder.IceCreamList[0].CalculatePrice();
             customer.Rewards.PunchCard = 0;
-            Console.WriteLine("Punch Card Redeemed");
+            Console.WriteLine("\nPunch Card Redeemed");
         }
         else
         {
             if (customer.Rewards.Tier == "Silver" || customer.Rewards.Tier == "Gold")
             {
-                Console.Write($"You have {customer.Rewards.Points} points. How much would you like to redeem? (nil for none)");
-                int points = Convert.ToInt32(Console.ReadLine());
+                int points;
+                while (true)
+                {
+                    Console.Write($"\nYou have {customer.Rewards.Points} points. How much would you like to redeem?: ");
+
+                    try
+                    {
+                        points = Convert.ToInt32(Console.ReadLine());
+
+                        if (points > customer.Rewards.Points)
+                        {
+                            throw new ArgumentException("input exceeded available points. Please enter valid input. ");
+                        }
+                        break;
+                    }
+                    catch(FormatException)
+                    {
+                        Console.WriteLine("Invalid input. Please try again.");
+                    }
+                    catch(ArgumentException ex)
+                    {
+                        Console.WriteLine($"{ex.Message}");
+                    }
+                }
+
                 if ((totalPrice - points * 0.04) < 0)
                 {
                     points -= Convert.ToInt32(Math.Floor(totalPrice * 25));
@@ -1013,10 +1041,13 @@ void processOrder()
             }
         }
 
+        Console.WriteLine("\n====Final bill====");
         Console.WriteLine($"Final bill amount: {totalPrice}");
         Console.WriteLine("Press any key to make payment");
         Console.ReadLine();
+
         customer.Rewards.PunchCard += currentOrder.IceCreamList.Count;
+        Console.WriteLine("10 points added to PunchCard");
         if (customer.Rewards.PunchCard > 10)
         {
             customer.Rewards.PunchCard = 10;
@@ -1025,10 +1056,12 @@ void processOrder()
         if (customer.Rewards.Points >= 50 && customer.Rewards.Points < 100)
         {
             customer.Rewards.Tier = "Silver";
+            Console.WriteLine("Member upgraded to silver. ");
         }
         else if (customer.Rewards.Points >= 100)
         {
             customer.Rewards.Tier = "Gold";
+            Console.WriteLine("Member upgraded to gold. ");
         }
         currentOrder.TimeFullfilled = DateTime.Now;
         customer.OrderHistory.Add(currentOrder);

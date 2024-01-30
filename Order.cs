@@ -62,15 +62,16 @@ namespace S10262115_PRG2Assignment
                 {
                     //show list of available waffle flavours
                     Console.WriteLine("\n====Available waffle flavour: ====");
-                    Console.WriteLine("1. red velvet");
-                    Console.WriteLine("2. charcoal ");
-                    Console.WriteLine("3. pandan");
+                    Console.WriteLine("1. Red velvet");
+                    Console.WriteLine("2. Charcoal ");
+                    Console.WriteLine("3. Pandan");
+                    Console.WriteLine("4. Original");
 
                     //prompt
                     Console.Write("\nEnter new waffle flavour: ");
                     waffleFlavour = Console.ReadLine().ToLower();
 
-                    if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan")
+                    if (waffleFlavour == "red velvet" || waffleFlavour == "charcoal" || waffleFlavour == "pandan" || waffleFlavour == "original")
                     {
                         break;
                     }
@@ -115,7 +116,7 @@ namespace S10262115_PRG2Assignment
                 else { Console.WriteLine("Enter valid number of scoops [1-3]"); }
             }
 
-            for (int i = scoops; i > 0; i--)
+            for (int i = scoops; i > 0;)
             {
                 Console.WriteLine($"\n===Enter new icecream flavour | remaining: {i} ==== ");
                 string flavourType;
@@ -151,13 +152,13 @@ namespace S10262115_PRG2Assignment
                     Console.Write("Enter new flavour quantity: ");
                     flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                    if (flavourQuantity < scoops || flavourQuantity > scoops)
+                    if (flavourQuantity == 0 || flavourQuantity > i)
                     {
                         Console.WriteLine("Invalid input. Please enter valid input. ");
                     }
                     else
                     {
-                        i = scoops - i;
+                        i -= flavourQuantity;
                         break;
                     }
                 }
