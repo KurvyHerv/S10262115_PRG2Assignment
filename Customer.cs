@@ -172,20 +172,31 @@ namespace S10262115_PRG2Assignment
                 int flavourQuantity;
                 while (true)
                 {
-
                     Console.Write("Enter flavour quantity: ");
-                    flavourQuantity = Convert.ToInt32(Console.ReadLine());
+                    try
+                    {
+                        flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                    if (flavourQuantity == 0 || flavourQuantity > i)
-                    {
-                        Console.WriteLine("Invalid input. Please enter valid input. ");
-                    }
-                    else
-                    {
-                        i -= flavourQuantity;
+                        if (flavourQuantity == 0 || flavourQuantity > i)
+                        {
+                            Console.WriteLine("Invalid input. Please enter valid input. ");
+                        }
+                        else
+                        {
+                            i -= flavourQuantity;
+                            break;
+                        }
                         break;
                     }
-                }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Invalid input. Please try again. ");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Console.WriteLine($"{ex.Message}");
+                    }
+                }                   
                 Flavour flavour = new Flavour(flavourType, premium, flavourQuantity);
                 flavours.Add(flavour);
             }

@@ -503,20 +503,33 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                     premium = true;
                 }
 
+
                 int flavourQuantity;
                 while (true)
                 {
                     Console.Write("Enter flavour quantity: ");
-                    flavourQuantity = Convert.ToInt32(Console.ReadLine());
+                    try
+                    {
+                        flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                    if (flavourQuantity == 0 || flavourQuantity > i)
-                    {
-                        Console.WriteLine("Invalid input. Please enter valid input. ");
-                    }
-                    else
-                    {
-                        i -= flavourQuantity;
+                        if (flavourQuantity == 0 || flavourQuantity > i)
+                        {
+                            Console.WriteLine("Invalid input. Please enter valid input. ");
+                        }
+                        else
+                        {
+                            i -= flavourQuantity;
+                            break;
+                        }
                         break;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Invalid input. Please try again. ");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Console.WriteLine($"{ex.Message}");
                     }
                 }
                 Flavour flavour = new Flavour(flavourType, premium, flavourQuantity);
@@ -846,16 +859,28 @@ void modifyOrder()
                 while (true)
                 {
                     Console.Write("Enter flavour quantity: ");
-                    flavourQuantity = Convert.ToInt32(Console.ReadLine());
+                    try
+                    {
+                        flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                    if (flavourQuantity < scoops || flavourQuantity > scoops)
-                    {
-                        Console.WriteLine("Invalid input. Please enter valid input. ");
-                    }
-                    else
-                    {
-                        i -= flavourQuantity;
+                        if (flavourQuantity == 0 || flavourQuantity > i)
+                        {
+                            Console.WriteLine("Invalid input. Please enter valid input. ");
+                        }
+                        else
+                        {
+                            i -= flavourQuantity;
+                            break;
+                        }
                         break;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Invalid input. Please try again. ");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Console.WriteLine($"{ex.Message}");
                     }
                 }
                 Flavour flavour = new Flavour(flavourType, premium, flavourQuantity);
@@ -1042,7 +1067,7 @@ void processOrder()
         }
 
         Console.WriteLine("\n====Final bill====");
-        Console.WriteLine($"Final bill amount: {totalPrice}");
+        Console.WriteLine($"Final bill amount: ${totalPrice:0.00}");
         Console.WriteLine("Press any key to make payment");
         Console.ReadLine();
 

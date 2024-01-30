@@ -106,14 +106,25 @@ namespace S10262115_PRG2Assignment
             int scoops;
             while (true)
             {
-                Console.Write("\nEnter new number of ice cream scoops: ");
-                scoops = Convert.ToInt32(Console.ReadLine());
-
-                if (scoops > 0 && scoops < 4)
+                Console.Write("\nEnter number of ice cream scoops[1-3]: ");
+                try
                 {
+                    scoops = Convert.ToInt32(Console.ReadLine());
+
+                    if (scoops < 1 || scoops > 3)
+                    {
+                        throw new ArgumentException("Enter valid number of scoops [1-3]");
+                    }
                     break;
                 }
-                else { Console.WriteLine("Enter valid number of scoops [1-3]"); }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid input. Please try again.");
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             for (int i = scoops; i > 0;)
@@ -146,20 +157,33 @@ namespace S10262115_PRG2Assignment
                     premium = true;
                 }
 
+
                 int flavourQuantity;
                 while (true)
                 {
-                    Console.Write("Enter new flavour quantity: ");
-                    flavourQuantity = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Enter flavour quantity: ");
+                    try
+                    {
+                        flavourQuantity = Convert.ToInt32(Console.ReadLine());
 
-                    if (flavourQuantity == 0 || flavourQuantity > i)
-                    {
-                        Console.WriteLine("Invalid input. Please enter valid input. ");
-                    }
-                    else
-                    {
-                        i -= flavourQuantity;
+                        if (flavourQuantity == 0 || flavourQuantity > i)
+                        {
+                            Console.WriteLine("Invalid input. Please enter valid input. ");
+                        }
+                        else
+                        {
+                            i -= flavourQuantity;
+                            break;
+                        }
                         break;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Invalid input. Please try again. ");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Console.WriteLine($"{ex.Message}");
                     }
                 }
                 Flavour flavour = new Flavour(flavourType, premium, flavourQuantity);
