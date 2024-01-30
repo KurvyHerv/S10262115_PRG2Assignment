@@ -41,6 +41,7 @@ string[] orders = File.ReadAllLines("orders.csv");
 List<Order> orderList = new List<Order>();
 Dictionary<Order, int> orderDict1 = new Dictionary<Order, int>();
 Dictionary<int, List<Order>> orderDict = new Dictionary<int, List<Order>>();
+Dictionary<int, int> currentOrderDict = new Dictionary<int, int>();
 List<string> ids = new List<string>();
 string[] premiumList = { "Durian", "Ube", "Sea Salt" };
 int k = 0;
@@ -343,9 +344,23 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
             orderId = order1.Id;
         }
     }
+    foreach (int customerId in customersDict.Keys)
+    {
+        if (customersDict[customerId].CurrentOrder != null)
+        {
+            int id = customersDict[customerId].CurrentOrder.Id;
+            if (id > orderId)
+            {
+                orderId = id;
+            }
+        }
+    }
 
     //create order id
     order.Id = orderId + 1;
+
+    //Add order to current order dict
+    currentOrderDict.Add(orderId + 1, customerID);
 
     //prompt user if customer wants another ice cream
     string add;
@@ -549,7 +564,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                 customersDict[customerID].CurrentOrder.AddIceCream(new Cup(option, scoops, flavours, toppings));
                 break;
         }
-    }       
+    }
 
 
     if (customer.Rewards.Tier == "Gold")
@@ -562,6 +577,8 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
         orderQueue.Enqueue(order);
         Console.WriteLine("\n====Order added to normal queue.==== ");
     }
+    
+    orderList.Add(order);
     Console.WriteLine("\n====Order summary: ====");
     Console.WriteLine(order.ToString());
 }
@@ -901,6 +918,7 @@ void modifyOrder()
                 Console.WriteLine("You cannot have zero ice creams in an order");
             }
             break;
+        
     }
 }
 
