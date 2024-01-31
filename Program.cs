@@ -1155,6 +1155,14 @@ void displayMonthlyCharges()
     int dateLeast = 9999999;
     int dateMost = 0;
     Dictionary<int, double> monthlyDict = new Dictionary<int, double>();
+
+    // Check if orderList is null
+    if (orderList == null || orderList.Count == 0)
+    {
+        Console.WriteLine("No orders available.");
+        return;
+    }
+
     foreach (Order order in orderList)
     {
         if (order.TimeFullfilled.HasValue)
@@ -1169,61 +1177,64 @@ void displayMonthlyCharges()
             }
         }
     }
+
     while (true)
     {
-        //prompt user for year
-        Console.Write($"Enter the year({dateLeast} - {dateMost}): ");
+        // prompt user for year
+        Console.Write("Enter the year: ");
+
         try
         {
-            inputYear = Convert.ToInt32(Console.ReadLine());
-            
-            if (inputYear < dateLeast ||  inputYear > dateMost)
+            // Validate user input
+            if (!int.TryParse(Console.ReadLine(), out inputYear))
             {
-                throw new ArgumentException($"Invalid input. Enter valid year [{dateLeast}/{dateMost}");
+                throw new FormatException(); //check input format
+            }
+
+            if (inputYear < dateLeast || inputYear > dateMost)
+            {
+                throw new ArgumentException($"Invalid input. Enter valid year [{dateLeast}/{dateMost}]");
             }
             else
             {
                 foreach (Order order in orderList)
                 {
-                    if (order.TimeFullfilled.HasValue)
+                    if (order.TimeFullfilled.HasValue && order.TimeFullfilled.Value.Year == inputYear)
                     {
-                        if (order.TimeFullfilled.Value.Year == inputYear)
+                        double totalPrice = order.IceCreamList.Sum(iceCream => iceCream.CalculatePrice()); //calculate total price in the month
+                        total += totalPrice;
+
+                        if (monthlyDict.ContainsKey(order.TimeFullfilled.Value.Month))
                         {
-                            double totalPrice = 0;
-                            for (int i = 0; i < order.IceCreamList.Count; i++)
-                            {
-                                totalPrice += order.IceCreamList[i].CalculatePrice();
-                            }
-                            total += totalPrice;
-                            if (monthlyDict.ContainsKey(order.TimeFullfilled.Value.Month))
-                            {
-                                monthlyDict[order.TimeFullfilled.Value.Month] += totalPrice;
-                            }
-                            else
-                            {
-                                monthlyDict.Add(order.TimeFullfilled.Value.Month, totalPrice);
-                            }
-                            
+                            monthlyDict[order.TimeFullfilled.Value.Month] += totalPrice;
+                        }
+                        else
+                        {
+                            monthlyDict.Add(order.TimeFullfilled.Value.Month, totalPrice);
                         }
                     }
                 }
+
                 Console.WriteLine("");
-                foreach (int key in monthlyDict.Keys)
+
+                for (int month = 1; month <= 12; month++) //display every month
                 {
-                    Console.WriteLine($"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(key)} {inputYear} {monthlyDict[key],-15:C2}");
+                    string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month); 
+                    double monthlyTotal = monthlyDict.ContainsKey(month) ? monthlyDict[month] : 0.0;
+                    Console.WriteLine($"{monthName} {inputYear}: {monthlyTotal,-15:C2}");
                 }
-                Console.WriteLine($"\nTotal: {total:C2}");
+
+                Console.WriteLine($"\nTotal: {total:C2}"); //display total
                 break;
-            }   
-            
+            }
         }
         catch (FormatException)
         {
-            Console.WriteLine($"Invalid input. Enter valid year [{dateLeast}/{dateMost}");
+            Console.WriteLine($"Invalid input. Enter valid year [{dateLeast}/{dateMost}]");
         }
-        catch (ArgumentException ex)
+        catch (Exception ex)
         {
-            Console.WriteLine($"{ex.Message}");
+            Console.WriteLine($"An error occurred: {ex.Message}");
         }
     }
 }
