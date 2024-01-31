@@ -1152,8 +1152,6 @@ void displayMonthlyCharges()
 {
     double total = 0;
     int inputYear;
-    int dateLeast = 9999999;
-    int dateMost = 0;
     Dictionary<int, double> monthlyDict = new Dictionary<int, double>();
 
     // Check if orderList is null
@@ -1163,20 +1161,6 @@ void displayMonthlyCharges()
         return;
     }
 
-    foreach (Order order in orderList)
-    {
-        if (order.TimeFullfilled.HasValue)
-        {
-            if (order.TimeFullfilled.Value.Year < dateLeast)
-            {
-                dateLeast = order.TimeFullfilled.Value.Year;
-            }
-            if (order.TimeFullfilled.Value.Year > dateMost)
-            {
-                dateMost = order.TimeFullfilled.Value.Year;
-            }
-        }
-    }
 
     while (true)
     {
@@ -1191,9 +1175,9 @@ void displayMonthlyCharges()
                 throw new FormatException(); //check input format
             }
 
-            if (inputYear < dateLeast || inputYear > dateMost)
+            if (inputYear < 2023 || inputYear > 2024)
             {
-                throw new ArgumentException($"Invalid input. Enter valid year [{dateLeast}/{dateMost}]");
+                throw new ArgumentException("Invalid input. Enter valid year [2023-2024]");
             }
             else
             {
@@ -1230,7 +1214,7 @@ void displayMonthlyCharges()
         }
         catch (FormatException)
         {
-            Console.WriteLine($"Invalid input. Enter valid year [{dateLeast}/{dateMost}]");
+            Console.WriteLine("Invalid input. Enter valid year [2023-2024]");
         }
         catch (Exception ex)
         {
