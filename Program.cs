@@ -1171,7 +1171,7 @@ void displayMonthlyCharges()
     while (true)
     {
         //prompt user for year
-        Console.WriteLine($"Enter the year: ({dateLeast} - {dateMost})");
+        Console.Write($"Enter the year({dateLeast} - {dateMost}): ");
         try
         {
             inputYear = Convert.ToInt32(Console.ReadLine());
