@@ -163,7 +163,7 @@ void Menu()
     Console.Write("Enter your option: ");
 }
 
-//1 - List all customers (Rena))
+//1 - List all customers 
 void ListAllCustomers(Dictionary<int, Customer> customersDict)
 {
     Console.WriteLine("\n{0, -10} {1, -15} {2, -15} {3, -20} {4, -20} {5, -15}",
@@ -176,7 +176,7 @@ void ListAllCustomers(Dictionary<int, Customer> customersDict)
     }
 }
 
-//2 - List all Current Orders (Hervin)
+//2 - List all Current Orders 
 void ListAllOrders(Dictionary<int, Customer> customersDict)
 {
     bool toggle = false;
@@ -191,7 +191,7 @@ void ListAllOrders(Dictionary<int, Customer> customersDict)
     if (toggle == false) { Console.WriteLine("No current orders"); }
 }
 
-//3 - Register a new Customer (Rena)
+//3 - Register a new Customer 
 void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
 {
     //default points & punchcard
@@ -296,7 +296,7 @@ void RegisterNewCustomer(Dictionary<int, Customer> customersDict)
             $"{newCustomer.Rewards.PunchCard}");
 }
 
-//4 - Create a Customer's Order (Rena)
+//4 - Create a Customer's Order 
 void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<Order>> orderDict)
 {
     List<Flavour> flavours = new List<Flavour>();
@@ -602,7 +602,7 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
     Console.WriteLine(order.ToString());
 }
 
-//5 - Display order details of a customer (Hervin)
+//5 - Display order details of a customer 
 void CustomerOrder()
 {
     ListAllCustomers(customersDict);
@@ -656,7 +656,7 @@ void CustomerOrder()
     }
 }
 
-//6 - Modify order details (Hervin)
+//6 - Modify order details
 void modifyOrder()
 {
     //list customers

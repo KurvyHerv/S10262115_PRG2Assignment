@@ -1,7 +1,8 @@
 ﻿//==========================================================
-// Student Number : S10258053, 
+// Student Number : S10258053
 // Student Name : Soong Chu Wen Rena
-// Partner Name : 
+// Partner Number : S10262115
+// Partner Name : Hervin Darmawan Sie
 //==========================================================
 
 using System;
