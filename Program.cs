@@ -43,7 +43,6 @@ for (int i = 1; i < customers.Length; i++)
 string[] orders = File.ReadAllLines("orders.csv");
 
 List<Order> orderList = new List<Order>();
-Dictionary<Order, int> orderDict1 = new Dictionary<Order, int>();
 Dictionary<int, List<Order>> orderDict = new Dictionary<int, List<Order>>();
 Dictionary<int, int> currentOrderDict = new Dictionary<int, int>();
 List<string> ids = new List<string>();
@@ -63,7 +62,8 @@ for (int i = 1; i < orders.Length; i++)
     }
     else
     {
-        orderList.Add(new(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2])));
+        //if order id is not in id list, create new order
+        orderList.Add(new(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2]))); 
     }
 
     //populate flavourlist
@@ -89,7 +89,7 @@ for (int i = 1; i < orders.Length; i++)
         dipped = true;
     }
 
-    
+    // if order id is in id list add to order
     if (ids.Contains(line[0]))
     {
         for (int j = 0; j < customersDict[Convert.ToInt32(line[1])].OrderHistory.Count; j++)
@@ -114,6 +114,7 @@ for (int i = 1; i < orders.Length; i++)
     }
     else
     {
+        // if order id is not in id list add to the new order obj
         if (line[4] == "Cup")
         {
             orderList[k].TimeFullfilled = Convert.ToDateTime(line[3]);
@@ -134,7 +135,7 @@ for (int i = 1; i < orders.Length; i++)
         }
     }
     int customerId = Convert.ToInt32(line[1]);
-    orderDict1.Add(orderList[k], customerId);
+    //add order to dict
     customersDict[customerId].OrderHistory.Add(orderList[k]);
     k++;
 }
@@ -157,6 +158,7 @@ void Menu()
     Console.WriteLine("[5] Display order details of a customer.");
     Console.WriteLine("[6] Modify order details.");
     Console.WriteLine("[7] Process current order in queue");
+    Console.WriteLine("[8] Monthly charged amounts breakdown");
     Console.WriteLine("[0] Exit.");
     Console.Write("Enter your option: ");
 }
@@ -1075,6 +1077,7 @@ void processOrder()
                 int points;
                 while (true)
                 {
+                    Console.WriteLine($"Total Payable: {totalPrice}");
                     Console.Write($"You have {customer.Rewards.Points} points. How much would you like to redeem?: ");
                     try
                     {
@@ -1147,20 +1150,59 @@ void processOrder()
 //Advanced B) Display monthly charged amounts breakdown & total charged amounts for the year
 void displayMonthlyCharges()
 {
+    double total = 0;
     int inputYear;
+    int dateLeast = 9999999;
+    int dateMost = 0;
+    foreach (Order order in orderList)
+    {
+        if (order.TimeFullfilled.HasValue)
+        {
+            if (order.TimeFullfilled.Value.Year < dateLeast)
+            {
+                dateLeast = order.TimeFullfilled.Value.Year;
+            }
+            if (order.TimeFullfilled.Value.Year > dateMost)
+            {
+                dateMost = order.TimeFullfilled.Value.Year;
+            }
+        }
+    }
     while (true)
     {
         //prompt user for year
-        Console.Write("Enter the year: ");
+        Console.WriteLine($"Enter the year: ({dateLeast} - {dateMost})");
         try
         {
             inputYear = Convert.ToInt32(Console.ReadLine());
-
-            if (inputYear < 2023 ||  inputYear > 2024)
+            
+            if (inputYear < dateLeast ||  inputYear > dateMost)
             {
                 throw new ArgumentException("Invalid input. Enter valid year [2023/2024]");
             }
-            break;
+            else
+            {
+                Console.WriteLine("");
+                foreach (Order order in orderList)
+                {
+                    if (order.TimeFullfilled.HasValue)
+                    {
+                        if (order.TimeFullfilled.Value.Year == inputYear)
+                        {
+                            double totalPrice = 0;
+                            for (int i = 0; i < order.IceCreamList.Count; i++)
+                            {
+                                totalPrice += order.IceCreamList[i].CalculatePrice();
+                            }
+                            total += totalPrice;
+                            Console.WriteLine($"{order.TimeFullfilled.Value:MMM} {order.TimeFullfilled.Value.Year} {totalPrice, -15:C2}");
+                        }
+                    }
+                }
+                Console.WriteLine($"\nTotal: {total:C2}");
+                break;
+            }
+            
         }
         catch (FormatException)
         {
