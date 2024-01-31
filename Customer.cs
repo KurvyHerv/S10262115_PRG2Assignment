@@ -188,7 +188,6 @@ namespace S10262115_PRG2Assignment
                             i -= flavourQuantity; //loops if scoop quota not met
                             break;
                         }
-                        break;
                     }
                     catch (FormatException) //checks if input is int format
                     {

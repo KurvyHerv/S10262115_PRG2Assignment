@@ -179,7 +179,6 @@ namespace S10262115_PRG2Assignment
                             i -= flavourQuantity; //loops if quota is not met
                             break;
                         }
-                        break;
                     }
                     catch (FormatException) //checks if input in int format
                     {

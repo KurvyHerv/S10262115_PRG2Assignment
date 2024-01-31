@@ -523,7 +523,6 @@ void CreateOrder(Dictionary<int, Customer> customersDict, Dictionary<int, List<O
                             i -= flavourQuantity; // scoops - flavourQuantity to check if quota of scoops has been met. If not loops again
                             break;
                         }
-                        break;
                     }
                     catch (FormatException) //checks if input is int
                     {
@@ -883,7 +882,6 @@ void modifyOrder()
                             i -= flavourQuantity; //if scoops quota is not met, loops 
                             break;
                         }
-                        break;
                     }
                     catch (FormatException) //check if input in int
                     {
