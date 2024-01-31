@@ -1154,18 +1154,7 @@ void displayMonthlyCharges()
     int inputYear;
     int dateLeast = 9999999;
     int dateMost = 0;
-    int jan = 0;
-    int feb = 0;
-    int mar = 0;
-    int apr = 0;
-    int may = 0;
-    int jun = 0;
-    int jul = 0;
-    int aug = 0;
-    int sep = 0;
-    int oct = 0;
-    int nov = 0;
-    int dec = 0;
+    Dictionary<int, double> monthlyDict = new Dictionary<int, double>();
     foreach (Order order in orderList)
     {
         if (order.TimeFullfilled.HasValue)
@@ -1194,7 +1183,6 @@ void displayMonthlyCharges()
             }
             else
             {
-                Console.WriteLine("");
                 foreach (Order order in orderList)
                 {
                     if (order.TimeFullfilled.HasValue)
@@ -1207,13 +1195,26 @@ void displayMonthlyCharges()
                                 totalPrice += order.IceCreamList[i].CalculatePrice();
                             }
                             total += totalPrice;
-                            Console.WriteLine($"{order.TimeFullfilled.Value:MMM} {order.TimeFullfilled.Value.Year} {totalPrice, -15:C2}");
+                            if (monthlyDict.ContainsKey(order.TimeFullfilled.Value.Month))
+                            {
+                                monthlyDict[order.TimeFullfilled.Value.Month] += totalPrice;
+                            }
+                            else
+                            {
+                                monthlyDict.Add(order.TimeFullfilled.Value.Month, totalPrice);
+                            }
+                            
                         }
                     }
                 }
+                Console.WriteLine("");
+                foreach (int key in monthlyDict.Keys)
+                {
+                    Console.WriteLine($"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(key)} {inputYear} {monthlyDict[key],-15:C2}");
+                }
                 Console.WriteLine($"\nTotal: {total:C2}");
                 break;
-            }
+            }   
             
         }
         catch (FormatException)
