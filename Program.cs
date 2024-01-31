@@ -1154,6 +1154,18 @@ void displayMonthlyCharges()
     int inputYear;
     int dateLeast = 9999999;
     int dateMost = 0;
+    int jan = 0;
+    int feb = 0;
+    int mar = 0;
+    int apr = 0;
+    int may = 0;
+    int jun = 0;
+    int jul = 0;
+    int aug = 0;
+    int sep = 0;
+    int oct = 0;
+    int nov = 0;
+    int dec = 0;
     foreach (Order order in orderList)
     {
         if (order.TimeFullfilled.HasValue)
@@ -1178,7 +1190,7 @@ void displayMonthlyCharges()
             
             if (inputYear < dateLeast ||  inputYear > dateMost)
             {
-                throw new ArgumentException("Invalid input. Enter valid year [2023/2024]");
+                throw new ArgumentException($"Invalid input. Enter valid year [{dateLeast}/{dateMost}");
             }
             else
             {
@@ -1206,7 +1218,7 @@ void displayMonthlyCharges()
         }
         catch (FormatException)
         {
-            Console.WriteLine("Invalid input. Enter valid year [2023/2024]");
+            Console.WriteLine($"Invalid input. Enter valid year [{dateLeast}/{dateMost}");
         }
         catch (ArgumentException ex)
         {
