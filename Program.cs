@@ -10,6 +10,7 @@ using S10262115_PRG2Assignment;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
 using System.Data;
 using System.Globalization;
@@ -1000,7 +1001,7 @@ void modifyOrder()
     }
 }
 
-// Process order and checkout
+// Advanced A) Process order and checkout
 void processOrder()
 {
     Order currentOrder = null;
@@ -1143,6 +1144,35 @@ void processOrder()
     }
 }
 
+//Advanced B) Display monthly charged amounts breakdown & total charged amounts for the year
+void displayMonthlyCharges()
+{
+    int inputYear;
+    while (true)
+    {
+        //prompt user for year
+        Console.Write("Enter the year: ");
+        try
+        {
+            inputYear = Convert.ToInt32(Console.ReadLine());
+
+            if (inputYear < 2023 ||  inputYear > 2024)
+            {
+                throw new ArgumentException("Invalid input. Enter valid year [2023/2024]");
+            }
+            break;
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid input. Enter valid year [2023/2024]");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+    }
+}
+
 //Initialise methods
 while (toggle)
 {
@@ -1177,6 +1207,10 @@ while (toggle)
         case "7":
             Console.WriteLine("\n========== [7] Process an order an checkout. ==========");
             processOrder();
+            break;
+        case "8": 
+            Console.WriteLine("\n========== [8] Display monthly charged amounts breakdown & total charged amounts for the year. ==========");
+            displayMonthlyCharges();
             break;
         case "0":
             Console.WriteLine("Bye!");
